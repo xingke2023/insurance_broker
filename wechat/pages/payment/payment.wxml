@@ -1,0 +1,103 @@
+<view class="container">
+  <!-- 顶部标题区 -->
+  <view class="header">
+    <view class="header-title">开通会员</view>
+    <view class="header-subtitle">Insurance Plan Assistant VIP</view>
+  </view>
+
+  <!-- 套餐选择区 - 横向 -->
+  <view class="plans-tabs">
+    <view
+      wx:for="{{plans}}"
+      wx:key="id"
+      class="plan-tab {{selectedPlan === item.id ? 'active' : ''}}"
+      bindtap="selectPlan"
+      data-plan="{{item.id}}"
+    >
+      <!-- 推荐角标 -->
+      <view class="hot-corner" wx:if="{{item.popular}}">
+        <text>🔥</text>
+      </view>
+
+      <view class="tab-header">
+        <text class="tab-name">{{item.name}}</text>
+        <view class="save-tag" wx:if="{{item.badge}}">
+          <text>{{item.badge}}</text>
+        </view>
+      </view>
+
+      <view class="tab-price">
+        <text class="price-symbol">¥</text>
+        <text class="price-value">{{item.price}}</text>
+        <text class="price-unit">/{{item.duration}}</text>
+      </view>
+
+      <view class="original-price" wx:if="{{item.originalPrice}}">
+        <text class="line-through">¥{{item.originalPrice}}</text>
+      </view>
+
+      <!-- 选中标记 -->
+      <view class="selected-indicator" wx:if="{{selectedPlan === item.id}}">
+        <text>✓</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 选中套餐详情 -->
+  <view class="plan-details">
+    <view class="details-card">
+      <!-- 功能列表 -->
+      <view class="features-title">
+        <text class="title-icon">✨</text>
+        <text>会员权益</text>
+      </view>
+      <view class="features-list">
+        <view
+          class="feature-item"
+          wx:for="{{plans}}"
+          wx:key="id"
+          wx:if="{{item.id === selectedPlan}}"
+        >
+          <view
+            class="feature"
+            wx:for="{{item.features}}"
+            wx:key="index"
+            wx:for-item="feature"
+          >
+            <text class="check-icon">✓</text>
+            <text class="feature-text">{{feature}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 优惠信息 -->
+      <view class="discount-info" wx:for="{{plans}}" wx:key="id" wx:if="{{item.id === selectedPlan && item.discount}}">
+        <view class="discount-banner">
+          <text class="fire-icon">🔥</text>
+          <text class="discount-text">{{item.discount}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 支付按钮 -->
+  <view class="bottom-action">
+    <button
+      class="pay-button"
+      bindtap="handlePay"
+      loading="{{paying}}"
+      disabled="{{paying}}"
+    >
+      <view class="pay-button-content" wx:if="{{!paying}}">
+        <text class="pay-text">立即开通</text>
+        <text class="pay-amount">¥{{selectedPrice}}</text>
+      </view>
+      <text wx:if="{{paying}}">支付中...</text>
+    </button>
+
+    <view class="security-tip">
+      <text class="lock-icon">🛡️</text>
+      <text>微信支付全程保护</text>
+    </view>
+  </view>
+</view>

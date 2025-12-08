@@ -1,0 +1,975 @@
+import { useState, useEffect, useRef } from 'react';
+import { Upload, Trash2, FileText, Image as ImageIcon, Loader2, Save, CheckCircle, List, X, Clock } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
+import { useAppNavigate } from '../hooks/useAppNavigate';
+import { authFetch } from '../utils/authFetch';
+
+const API_BASE_URL = 'https://yu.xingke888.com';
+const WS_BASE_URL = 'wss://yu.xingke888.com';
+
+function PlanAnalyzer2() {
+  const onNavigate = useAppNavigate();
+  const { user } = useAuth();
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [uploadedFilePath, setUploadedFilePath] = useState('');
+  const [prompt, setPrompt] = useState('<image>\n<|grounding|>Convert the document to markdown.');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [taskId, setTaskId] = useState('');
+  const [resultDir, setResultDir] = useState('');
+  const [parseCompleted, setParseCompleted] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [fileStructure, setFileStructure] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [fileContent, setFileContent] = useState('');
+  const [progress, setProgress] = useState({ step: 0, message: '', percentage: 0 });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+  const [backgroundTasks, setBackgroundTasks] = useState([]);
+  const [showTaskList, setShowTaskList] = useState(false);
+  const [websocket, setWebsocket] = useState(null);
+  const [completedTasks, setCompletedTasks] = useState(new Set()); // 防止重复处理已完成的任务
+  const [hasStartedAnalysis, setHasStartedAnalysis] = useState(false); // 记录是否已经开始分析
+  const [loadingTaskId, setLoadingTaskId] = useState(null); // 记录正在加载的任务ID
+  const fetchingDirsRef = useRef(new Set()); // 追踪正在获取的目录，防止重复请求
+  const fetchingFilesRef = useRef(new Set()); // 追踪正在获取的文件，防止重复请求
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // 添加创建时间到文件对象
+      file.createdAt = new Date().toISOString();
+      setUploadedFile(file);
+      const url = URL.createObjectURL(file);
+      setPreviewUrl(url);
+      handleFileUpload(file);
+    }
+  };
+
+  const handleFileUpload = async (file) => {
+    setIsUploading(true);
+    setParseCompleted(false);
+    setSelectedFile(null);
+    setUploadedFilePath('');
+    setTaskId('');
+    setResultDir('');
+    setHasStartedAnalysis(false); // 重置分析状态，允许新文件分析
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(`${API_BASE_URL}/api/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.status === 'success') {
+        setUploadedFilePath(data.file_path);
+        setIsUploading(false);
+      } else {
+        setIsUploading(false);
+        setUploadedFile(null);
+        alert('文件上传失败');
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      setIsUploading(false);
+      setUploadedFile(null);
+      alert('文件上传失败：无法连接到服务器');
+    }
+  };
+
+  const handleDelete = () => {
+    setUploadedFile(null);
+    setPreviewUrl('');
+    setUploadedFilePath('');
+    setParseCompleted(false);
+    setSelectedFile(null);
+    setTaskId('');
+    setResultDir('');
+    setProgress({ step: 0, message: '' });
+    setHasStartedAnalysis(false); // 重置分析状态
+  };
+
+  // 加载本地保存的后台任务
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('backgroundTasks2');
+    if (savedTasks) {
+      const tasks = JSON.parse(savedTasks);
+      setBackgroundTasks(tasks);
+
+      // 恢复未完成的任务
+      tasks.forEach(task => {
+        if (task.state !== 'finished' && task.state !== 'error') {
+          resumeTask(task.task_id);
+        }
+      });
+    }
+
+    // 清理函数：组件卸载时关闭WebSocket
+    return () => {
+      if (websocket) {
+        websocket.close();
+      }
+    };
+  }, []);
+
+  // 保存后台任务到本地
+  const saveTasksToLocal = (tasks) => {
+    localStorage.setItem('backgroundTasks2', JSON.stringify(tasks));
+  };
+
+  // 连接WebSocket监听任务进度
+  const connectWebSocket = (currentTaskId) => {
+    // 构建WebSocket URL - 使用远程服务器
+    const wsUrl = `${WS_BASE_URL}/ws/progress/${currentTaskId}`;
+    console.log('连接WebSocket:', wsUrl);
+
+    const ws = new WebSocket(wsUrl);
+    let hasCompleted = false; // 防止重复处理完成事件
+
+    ws.onopen = () => {
+      console.log('WebSocket连接成功:', currentTaskId);
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log('收到WebSocket消息:', data);
+
+        if (data.task_id === currentTaskId) {
+          const progressPercent = data.progress || 0;
+
+          // 更新当前显示的任务进度
+          setProgress(prev => ({
+            step: progressPercent >= 100 ? 4 : progressPercent >= 60 ? 3 : progressPercent >= 30 ? 2 : 1,
+            message: progressPercent >= 100 ? '解析完成！' : `正在处理中... ${progressPercent}%`,
+            percentage: progressPercent
+          }));
+
+          // 更新后台任务列表
+          updateBackgroundTask(currentTaskId, {
+            progress: progressPercent,
+            state: progressPercent >= 100 ? 'finished' : 'running'
+          });
+
+          // 如果完成且未处理过，获取结果
+          if (progressPercent >= 100 && !hasCompleted) {
+            hasCompleted = true; // 标记已处理，防止重复
+            console.log('任务完成，开始获取结果:', currentTaskId);
+            fetchTaskResult(currentTaskId);
+            ws.close();
+          }
+        }
+      } catch (error) {
+        console.error('解析WebSocket消息失败:', error);
+      }
+    };
+
+    ws.onerror = (error) => {
+      console.error('WebSocket错误:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket连接关闭:', currentTaskId);
+    };
+
+    return ws;
+  };
+
+  // 恢复任务监听
+  const resumeTask = async (taskId) => {
+    try {
+      // 检查任务状态
+      const response = await fetch(`${API_BASE_URL}/api/progress/${taskId}`);
+      const data = await response.json();
+
+      if (data.status === 'success') {
+        if (data.state === 'finished') {
+          // 任务已完成，获取结果
+          fetchTaskResult(taskId);
+        } else if (data.state !== 'error') {
+          // 任务仍在进行，连接WebSocket
+          connectWebSocket(taskId);
+        }
+      }
+    } catch (error) {
+      console.error('恢复任务失败:', error);
+    }
+  };
+
+  // 获取任务结果
+  const fetchTaskResult = async (currentTaskId) => {
+    // 防止重复处理同一个任务
+    if (completedTasks.has(currentTaskId)) {
+      console.log('任务已处理过，跳过重复调用:', currentTaskId);
+      return;
+    }
+
+    // 标记任务为正在处理
+    setCompletedTasks(prev => new Set(prev).add(currentTaskId));
+
+    try {
+      const resultRes = await fetch(`${API_BASE_URL}/api/result/${currentTaskId}`);
+      const resultData = await resultRes.json();
+
+      if (resultData.status === 'success' && resultData.state === 'finished') {
+        // 更新后台任务状态
+        updateBackgroundTask(currentTaskId, {
+          state: 'finished',
+          progress: 100,
+          result_dir: resultData.result_dir,
+          completed_at: new Date().toISOString()
+        });
+
+        // 如果是当前显示的任务，更新UI
+        setTaskId(prevTaskId => {
+          if (prevTaskId === currentTaskId) {
+            setResultDir(resultData.result_dir);
+            setParseCompleted(true);
+            setIsProcessing(false);
+            setProgress({ step: 4, message: '解析完成！', percentage: 100 });
+            fetchFileStructure(resultData.result_dir);
+          }
+          return prevTaskId;
+        });
+      }
+    } catch (error) {
+      console.error('获取任务结果失败:', error);
+      // 标记任务失败
+      updateBackgroundTask(currentTaskId, {
+        state: 'error',
+        error: error.message
+      });
+      // 失败时从已完成集合中移除，允许重试
+      setCompletedTasks(prev => {
+        const next = new Set(prev);
+        next.delete(currentTaskId);
+        return next;
+      });
+    }
+  };
+
+  // 更新后台任务
+  const updateBackgroundTask = (taskId, updates) => {
+    setBackgroundTasks(prevTasks => {
+      const newTasks = prevTasks.map(task =>
+        task.task_id === taskId ? { ...task, ...updates } : task
+      );
+      saveTasksToLocal(newTasks);
+      return newTasks;
+    });
+  };
+
+  // 添加后台任务
+  const addBackgroundTask = (task) => {
+    setBackgroundTasks(prevTasks => {
+      const newTasks = [...prevTasks, task];
+      saveTasksToLocal(newTasks);
+      return newTasks;
+    });
+  };
+
+  // 删除后台任务
+  const removeBackgroundTask = (taskId) => {
+    setBackgroundTasks(prevTasks => {
+      const newTasks = prevTasks.filter(task => task.task_id !== taskId);
+      saveTasksToLocal(newTasks);
+      return newTasks;
+    });
+  };
+
+  const handleStartParsing = async () => {
+    if (!uploadedFilePath) {
+      alert('请先上传文件');
+      return;
+    }
+
+    setIsProcessing(true);
+    setHasStartedAnalysis(true); // 标记已经开始分析
+    setParseCompleted(false);
+    setResultDir('');
+    setProgress({ step: 1, message: '正在初始化...', percentage: 0 });
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/start`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          file_path: uploadedFilePath,
+          prompt: prompt,
+        }),
+      });
+
+      const data = await response.json();
+      if (data.status === 'running' && data.task_id) {
+        const newTaskId = data.task_id;
+        setTaskId(newTaskId);
+
+        // 添加到后台任务列表
+        addBackgroundTask({
+          task_id: newTaskId,
+          file_name: uploadedFile?.name || '未知文件',
+          file_size: uploadedFile?.size || 0,
+          state: 'running',
+          progress: 0,
+          created_at: new Date().toISOString()
+        });
+
+        // 连接WebSocket监听进度
+        const ws = connectWebSocket(newTaskId);
+        setWebsocket(ws);
+
+        setProgress({ step: 2, message: '正在处理中...', percentage: 10 });
+
+        // 提示用户任务已开始
+        setTimeout(() => {
+          alert('任务已开始处理！\n\n您可以在下方查看实时进度。\n您也可以关闭页面，随时可以点击"后台任务"查看，任务会在后台自动处理。');
+
+          // 只重置处理状态，保持分析标志为true（按钮保持禁用）
+          setIsProcessing(false);
+          // hasStartedAnalysis 保持为 true，按钮继续禁用
+          // 注意：保留 uploadedFile, previewUrl, uploadedFilePath - 用户可以看到正在分析的文件
+          // 注意：不重置进度条，让用户继续看到当前任务的进度
+          // 注意：不关闭WebSocket连接，继续接收进度更新
+        }, 1000);
+      } else {
+        alert('启动解析任务失败');
+        setIsProcessing(false);
+      }
+    } catch (error) {
+      console.error('Parse error:', error);
+      alert('解析失败：无法连接到服务器');
+      setIsProcessing(false);
+    }
+  };
+
+  // 返回计划书列表
+  const handleNavigateHome = () => {
+    // 关闭当前WebSocket连接
+    if (websocket) {
+      websocket.close();
+    }
+    setIsProcessing(false);
+    onNavigate && onNavigate('plan-management');
+  };
+
+  // 查看任务详情
+  const handleViewTask = async (task) => {
+    if (task.state === 'finished' && task.result_dir) {
+      setLoadingTaskId(task.task_id); // 记录正在加载的任务ID
+      try {
+        setTaskId(task.task_id);
+        setResultDir(task.result_dir);
+        setParseCompleted(true);
+        setProgress({ step: 4, message: '解析完成！', percentage: 100 });
+
+        // 恢复任务的文件信息，用于显示基本信息
+        if (task.file_name) {
+          // 创建一个模拟的 File 对象用于显示信息
+          const mockFile = {
+            name: task.file_name,
+            size: task.file_size || 0,
+            createdAt: task.created_at
+          };
+          setUploadedFile(mockFile);
+        }
+
+        await fetchFileStructure(task.result_dir);
+        setShowTaskList(false);
+      } catch (error) {
+        console.error('加载任务结果失败:', error);
+        alert('加载任务结果失败，请重试');
+      } finally {
+        setLoadingTaskId(null); // 清除加载状态
+      }
+    } else {
+      alert('任务尚未完成');
+    }
+  };
+
+  const fetchFileStructure = async (dir) => {
+    // 防止重复获取同一个目录（使用 ref 追踪）
+    if (fetchingDirsRef.current.has(dir)) {
+      console.log('⚠️ 目录正在获取中，跳过重复请求:', dir);
+      return;
+    }
+
+    // 标记开始获取
+    fetchingDirsRef.current.add(dir);
+    console.log('✅ 开始获取文件结构，目录:', dir);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/folder?path=${encodeURIComponent(dir)}`);
+      const data = await response.json();
+      console.log('文件结构API响应:', data);
+
+      if (data.status === 'success') {
+        const children = data.children || [];
+        console.log('原始文件列表:', children);
+
+        // 过滤掉 *det.mmd 文件，只保留 *.mmd 文件（不包含det结尾的）
+        const filteredChildren = children.filter(file => {
+          if (file.name.endsWith('.mmd')) {
+            // 排除 *det.mmd 文件
+            return !file.name.endsWith('det.mmd');
+          }
+          return true; // 保留其他类型的文件
+        });
+
+        console.log('过滤后的文件列表:', filteredChildren);
+        setFileStructure(filteredChildren);
+
+        // 自动选择并显示第一个 .mmd 文件
+        const firstMmdFile = filteredChildren.find(file =>
+          file.type === 'file' && file.name.endsWith('.mmd')
+        );
+
+        console.log('找到的第一个mmd文件:', firstMmdFile);
+        if (firstMmdFile) {
+          await handleFileClick(firstMmdFile);
+        } else {
+          console.warn('没有找到.mmd文件');
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching file structure:', error);
+    } finally {
+      // 完成后移除标记（延迟移除，确保同步调用也能拦截）
+      setTimeout(() => {
+        fetchingDirsRef.current.delete(dir);
+        console.log('🔄 目录获取完成，移除标记:', dir);
+      }, 100);
+    }
+  };
+
+  const handleFileClick = async (file) => {
+    if (file.type === 'file') {
+      const filePath = file.path;
+
+      // 防止重复获取同一个文件
+      if (fetchingFilesRef.current.has(filePath)) {
+        console.log('⚠️ 文件正在加载中，跳过重复请求:', filePath);
+        return;
+      }
+
+      // 标记开始获取
+      fetchingFilesRef.current.add(filePath);
+      console.log('✅ 正在加载文件:', file.name, filePath);
+
+      setSelectedFile(file);
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/file/content?path=${encodeURIComponent(filePath)}`);
+        const data = await response.json();
+        console.log('文件内容API响应:', data);
+
+        // 兼容两种响应格式：
+        // 1. {status: 'success', content: '...'}
+        // 2. {content: '...'}（直接返回content）
+        let content = '';
+        if (data.status === 'success') {
+          content = data.content || '';
+        } else if (data.content) {
+          // 没有status字段，但有content字段
+          content = data.content;
+        } else {
+          console.error('API返回的数据格式不正确:', data);
+          content = '';
+        }
+
+        console.log('设置文件内容，长度:', content.length);
+        console.log('内容前100字符:', content.substring(0, 100));
+        setFileContent(content);
+      } catch (error) {
+        console.error('获取文件内容出错:', error);
+      } finally {
+        // 完成后移除标记
+        setTimeout(() => {
+          fetchingFilesRef.current.delete(filePath);
+          console.log('🔄 文件加载完成，移除标记:', filePath);
+        }, 100);
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    if (!fileContent) {
+      alert('没有可保存的内容');
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveSuccess(false);
+
+    try {
+      // 第一步：保存到数据库
+      const response = await fetch('/api/ocr/save/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          file_name: uploadedFile?.name || selectedFile?.name || 'unknown.pdf',
+          ocr_content: fileContent,
+          task_id: taskId,
+          result_dir: resultDir,
+          user_id: user?.id  // 添加当前登录用户ID
+        }),
+      });
+
+      const data = await response.json();
+      console.log('保存响应:', data);
+
+      if (data.status === 'success') {
+        const documentId = data.document_id;
+        setSaveSuccess(true);
+        alert(`保存成功！文档ID: ${documentId}\n\n正在后台提取基本信息...`);
+
+        // 第二步：异步调用提取基本信息API（不阻塞UI）
+        authFetch(`/api/ocr/documents/${documentId}/basic-info/`, {
+          method: 'POST',
+        })
+          .then(res => res.json())
+          .then(result => {
+            if (result.status === 'success') {
+              console.log('基本信息提取成功:', result.data);
+            } else {
+              console.error('基本信息提取失败:', result.message);
+            }
+          })
+          .catch(err => {
+            console.error('提取基本信息时发生错误:', err);
+          });
+
+        setTimeout(() => setSaveSuccess(false), 3000);
+      } else {
+        alert(`保存失败: ${data.message}`);
+      }
+    } catch (error) {
+      console.error('保存出错:', error);
+      alert('保存失败：无法连接到服务器');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-slate-100">
+      {/* Header */}
+      <header className="bg-gradient-to-r from-navy-700 via-primary-600 to-navy-700 shadow-lg sticky top-0 z-10 border-b-2 border-primary-500/30">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 py-2 md:py-3">
+          {/* 返回按钮 */}
+          <div className="mb-1">
+            <button
+              onClick={() => onNavigate && onNavigate('home')}
+              className="px-3 md:px-4 py-1.5 md:py-2 bg-white text-primary-700 hover:bg-blue-50 rounded-lg font-semibold transition-all text-sm md:text-base whitespace-nowrap shadow-md"
+            >
+              返回首页
+            </button>
+          </div>
+
+          {/* 标题 - 居中 */}
+          <div className="text-center">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl text-white font-bold tracking-wide drop-shadow-lg">
+              计划书智能分析工具 2.0
+            </h1>
+            <p className="mt-1 md:mt-2 text-blue-100 text-xs md:text-sm">独立版本 - AI驱动的保险行业智能化解决方案</p>
+          </div>
+        </div>
+      </header>
+
+      {/* 后台任务列表弹窗 */}
+      {showTaskList && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden shadow-2xl">
+            <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 bg-gradient-to-r from-primary-50 to-blue-50">
+              <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-2">
+                <Clock className="w-6 h-6" />
+                后台任务列表
+              </h2>
+              <button
+                onClick={() => setShowTaskList(false)}
+                className="p-2 hover:bg-gray-200 rounded-lg transition-all"
+              >
+                <X className="w-6 h-6 text-gray-600" />
+              </button>
+            </div>
+
+            <div className="p-4 md:p-6 overflow-y-auto max-h-[calc(80vh-80px)]">
+              {backgroundTasks.length === 0 ? (
+                <div className="text-center py-12 text-gray-500">
+                  <Clock className="w-16 h-16 mx-auto mb-4 opacity-30" />
+                  <p>暂无后台任务</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {backgroundTasks.map((task) => (
+                    <div
+                      key={task.task_id}
+                      className="bg-gradient-to-r from-slate-50 to-blue-50 rounded-xl p-4 border border-primary-200 hover:shadow-md transition-all"
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-800 mb-1">{task.file_name}</h3>
+                          <p className="text-xs text-gray-500">任务ID: {task.task_id}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {task.state === 'running' && (
+                            <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded-full flex items-center gap-1">
+                              <Loader2 className="w-3 h-3 animate-spin" />
+                              处理中
+                            </span>
+                          )}
+                          {task.state === 'finished' && (
+                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full flex items-center gap-1">
+                              <CheckCircle className="w-3 h-3" />
+                              已完成
+                            </span>
+                          )}
+                          {task.state === 'error' && (
+                            <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded-full">
+                              失败
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 进度条 */}
+                      {task.state === 'running' && (
+                        <div className="mb-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-xs text-gray-600">进度</span>
+                            <span className="text-xs font-semibold text-primary-700">{task.progress || 0}%</span>
+                          </div>
+                          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-primary-600 to-blue-600 transition-all duration-300"
+                              style={{ width: `${task.progress || 0}%` }}
+                            />
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span>创建时间: {new Date(task.created_at).toLocaleString('zh-CN')}</span>
+                        <div className="flex gap-2">
+                          {task.state === 'finished' && (
+                            <button
+                              onClick={() => handleViewTask(task)}
+                              disabled={loadingTaskId === task.task_id}
+                              className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
+                                loadingTaskId === task.task_id
+                                  ? 'bg-gray-400 text-white cursor-not-allowed'
+                                  : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                              }`}
+                            >
+                              {loadingTaskId === task.task_id ? (
+                                <>
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                  正在加载中
+                                </>
+                              ) : (
+                                '查看结果'
+                              )}
+                            </button>
+                          )}
+                          <button
+                            onClick={() => removeBackgroundTask(task.task_id)}
+                            className="px-3 py-1 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-all"
+                          >
+                            删除
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 md:px-8 py-4 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          {/* Left Panel - File Upload */}
+          <div className="space-y-3 md:space-y-4">
+            {/* Upload Controls */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => document.getElementById('file-input-2')?.click()}
+                disabled={isUploading}
+                className="flex-1 px-3 md:px-4 py-2.5 md:py-3 bg-gradient-to-r from-primary-50 to-blue-50 border-2 border-dashed border-primary-300 hover:border-primary-500 rounded-lg transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm md:text-base"
+              >
+                {isUploading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 md:h-5 md:w-5 animate-spin" />
+                    <span className="hidden sm:inline">上传中...</span>
+                    <span className="sm:hidden">上传中...</span>
+                  </>
+                ) : (
+                  <>
+                    <Upload className="h-4 w-4 md:h-5 md:w-5" />
+                    <span className="hidden sm:inline">上传文件（PDF / PNG / JPG）</span>
+                    <span className="sm:hidden">上传文件</span>
+                  </>
+                )}
+              </button>
+              <input
+                id="file-input-2"
+                type="file"
+                accept=".pdf,.png,.jpg,.jpeg"
+                className="hidden"
+                onChange={handleFileSelect}
+                disabled={isUploading}
+              />
+              <button
+                onClick={handleDelete}
+                disabled={!uploadedFile}
+                className="px-3 md:px-4 py-2.5 md:py-3 bg-white hover:bg-red-50 border-2 border-gray-300 hover:border-red-300 rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Trash2 className="h-4 w-4 md:h-5 md:w-5" />
+              </button>
+            </div>
+
+            {/* File Preview */}
+            <div className="bg-white rounded-xl border-2 border-primary-200 shadow-lg p-4 md:p-6 h-[300px] md:h-[500px] overflow-auto">
+              {previewUrl ? (
+                <div className="flex items-center justify-center">
+                  {uploadedFile?.type === 'application/pdf' ? (
+                    <iframe
+                      src={previewUrl}
+                      className="w-full h-[250px] md:h-[450px] rounded-lg border border-gray-300"
+                      title="PDF Preview"
+                    />
+                  ) : (
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="max-w-full h-auto rounded-lg shadow-md"
+                    />
+                  )}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                  <Upload className="h-12 w-12 md:h-16 md:w-16 mb-3 md:mb-4 opacity-30" />
+                  <p className="text-sm md:text-base">请上传文件以预览</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Right Panel - Results */}
+          <div className="space-y-3 md:space-y-4">
+            {/* Start Analysis Button and Background Tasks Button */}
+            <div className="flex gap-2">
+              <button
+                onClick={handleStartParsing}
+                disabled={!uploadedFile || !uploadedFilePath || isUploading || hasStartedAnalysis}
+                className="flex-1 px-4 md:px-6 py-3 md:py-4 bg-gradient-to-r from-primary-600 to-blue-600 text-white rounded-xl shadow-lg hover:from-primary-700 hover:to-blue-700 hover:shadow-xl transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-base md:text-lg"
+              >
+                {isProcessing ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin" />
+                    <span>正在分析中...</span>
+                  </>
+                ) : (
+                  '开始分析'
+                )}
+              </button>
+
+              {/* 后台任务按钮 */}
+              {backgroundTasks.length > 0 && (
+                <button
+                  onClick={() => setShowTaskList(true)}
+                  className="relative px-3 md:px-4 py-3 md:py-4 bg-white border-2 border-primary-500 text-primary-700 hover:bg-primary-50 rounded-xl shadow-lg font-semibold transition-all flex items-center justify-center gap-2 whitespace-nowrap text-sm md:text-base"
+                  title="后台任务"
+                >
+                  <List className="w-4 h-4 md:w-5 md:h-5" />
+                  <span>后台任务</span>
+                  {backgroundTasks.filter(t => t.state === 'running').length > 0 && (
+                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {backgroundTasks.filter(t => t.state === 'running').length}
+                    </span>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* 后台未完成任务列表 */}
+            {backgroundTasks.filter(t => t.state === 'running').length > 0 && (
+              <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-xl border-2 border-amber-200 p-3 md:p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-xs md:text-sm font-semibold text-amber-900 flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    后台处理中的任务 ({backgroundTasks.filter(t => t.state === 'running').length})
+                  </h3>
+                </div>
+                <div className="space-y-2">
+                  {backgroundTasks.filter(t => t.state === 'running').map((task, index) => (
+                    <div key={task.task_id} className="bg-white rounded-lg p-2 md:p-3 border border-amber-200">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs md:text-sm font-medium text-gray-800 truncate" title={task.file_name}>
+                            {index + 1}. {task.file_name}
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            进度: {task.progress || 0}%
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => removeBackgroundTask(task.task_id)}
+                          className="p-1 hover:bg-red-100 rounded transition-all flex-shrink-0"
+                          title="删除任务"
+                        >
+                          <X className="w-4 h-4 text-red-600" />
+                        </button>
+                      </div>
+                      {/* 进度条 */}
+                      <div className="mt-2 bg-gray-200 rounded-full h-1.5 overflow-hidden">
+                        <div
+                          className="bg-gradient-to-r from-primary-600 to-blue-600 h-full transition-all duration-500"
+                          style={{ width: `${task.progress || 0}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Progress Indicator */}
+            {isProcessing && (
+              <div className="bg-primary-50 rounded-xl border-2 border-primary-200 p-3 md:p-4">
+                <h3 className="text-xs md:text-sm font-semibold text-navy-800 mb-2 md:mb-3">处理进度</h3>
+
+                {/* 百分比进度条 */}
+                <div className="mb-3 md:mb-4">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-xs text-gray-600">总体进度</span>
+                    <span className="text-xs font-bold text-primary-700">{progress.percentage || 0}%</span>
+                  </div>
+                  <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-primary-600 via-blue-600 to-navy-600 transition-all duration-500"
+                      style={{ width: `${progress.percentage || 0}%` }}
+                    />
+                  </div>
+                </div>
+
+                {/* 步骤指示器 */}
+                <div className="space-y-1.5 md:space-y-2">
+                  {[
+                    { step: 1, label: '初始化' },
+                    { step: 2, label: '处理中' },
+                    { step: 3, label: '获取结果' },
+                    { step: 4, label: '完成' }
+                  ].map(({ step, label }) => (
+                    <div key={step} className="flex items-center gap-2 md:gap-3">
+                      {progress.step > step ? (
+                        <div className="h-4 w-4 md:h-5 md:w-5 bg-green-500 rounded-full flex items-center justify-center">
+                          <svg className="h-2.5 w-2.5 md:h-3 md:w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                      ) : progress.step === step ? (
+                        <Loader2 className="h-4 w-4 md:h-5 md:w-5 text-primary-600 animate-spin" />
+                      ) : (
+                        <div className="h-4 w-4 md:h-5 md:w-5 border-2 border-gray-300 rounded-full" />
+                      )}
+                      <span className={`text-xs md:text-sm ${progress.step >= step ? 'text-gray-900 font-medium' : 'text-gray-500'}`}>
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {progress.message && (
+                  <p className="mt-2 md:mt-3 text-xs md:text-sm text-primary-700 font-semibold">{progress.message}</p>
+                )}
+              </div>
+            )}
+
+            {/* MMD Content Preview - 解析完成后直接显示 */}
+            {parseCompleted && (
+              <div className="space-y-3 md:space-y-4">
+                <div className="bg-white rounded-xl border-2 border-primary-200 shadow-lg">
+                  <div className="bg-gradient-to-r from-primary-100 to-blue-100 px-3 md:px-4 py-2 md:py-3 border-b border-primary-200">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-2">
+                      <h3 className="text-xs md:text-sm font-semibold text-gray-700">
+                        📄 OCR解析结果
+                      </h3>
+                      <button
+                      onClick={handleSave}
+                      disabled={isSaving || !fileContent || saveSuccess}
+                      className={`w-full sm:w-auto px-3 md:px-4 py-1.5 md:py-2 rounded-lg font-semibold transition-all flex items-center justify-center gap-2 text-sm shadow-md ${
+                        saveSuccess
+                          ? 'bg-green-500 text-white cursor-not-allowed'
+                          : 'bg-gradient-to-r from-primary-600 to-blue-600 text-white hover:from-primary-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
+                      }`}
+                    >
+                      {isSaving ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span>保存中...</span>
+                        </>
+                      ) : saveSuccess ? (
+                        <>
+                          <CheckCircle className="h-4 w-4" />
+                          <span>已保存</span>
+                        </>
+                      ) : (
+                        <>
+                          <Save className="h-4 w-4" />
+                          <span>保存到数据库</span>
+                        </>
+                      )}
+                    </button>
+                    </div>
+
+                    {/* 任务基本信息 */}
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-600">
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">任务ID:</span>
+                        <span className="font-mono" title={taskId}>{taskId || '-'}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium whitespace-nowrap">文件名:</span>
+                        <span>{uploadedFile?.name || '-'}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">创建时间:</span>
+                        <span>{uploadedFile?.createdAt ? new Date(uploadedFile.createdAt).toLocaleString('zh-CN') : '-'}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 md:p-6 min-h-[300px] md:min-h-[400px] max-h-[500px] md:max-h-[600px] overflow-auto bg-gray-50">
+                    {fileContent ? (
+                      <pre className="text-xs md:text-sm text-gray-800 whitespace-pre-wrap font-mono leading-relaxed">
+                        {fileContent}
+                      </pre>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center h-full text-gray-400">
+                        <Loader2 className="h-6 w-6 md:h-8 md:w-8 animate-spin mb-2" />
+                        <p className="text-sm md:text-base">正在加载内容...</p>
+                        <p className="text-xs mt-2">selectedFile: {selectedFile ? '✓' : '✗'}</p>
+                        <p className="text-xs">fileContent length: {fileContent?.length || 0}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+export default PlanAnalyzer2;

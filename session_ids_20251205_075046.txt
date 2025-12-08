@@ -1,0 +1,1 @@
+新建一个页面，路由是plan-analyzer2，与plan-analyzer页面逻辑相同，不要影响plan-analyzer页面，但是是分步骤实施的版本，也就是把celery的任务分开，分开七个按钮，每个按钮实施不同的步骤，第一个按钮是ocr识别保存到数据库，依次把plan-analyzer页面的7个步骤分为七个不同按钮，每个按钮调用的逻辑与之前的plan-analyzer页面相同也就是共用相同的函数|b6dde457-b309-475e-ad60-5a34872d7da3

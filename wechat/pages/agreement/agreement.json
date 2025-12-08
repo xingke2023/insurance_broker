@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "用户协议",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "renderer": "webview",
+  "componentFramework": "exparser"
+}

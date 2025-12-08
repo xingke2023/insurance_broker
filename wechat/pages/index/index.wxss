@@ -1,0 +1,306 @@
+/**index.wxss**/
+page {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(180deg, #0078D4 0%, #005A9E 30%, #f0f4f8 100%);
+}
+
+.page {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: transparent;
+}
+
+/* 顶部背景渐变 */
+.header-bg {
+  display: none;
+}
+
+/* 用户区域 - 固定不滚动 */
+.user-section {
+  flex-shrink: 0;
+  padding: 220rpx 30rpx 0;
+  max-width: 750rpx;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* 功能区域滚动容器 */
+.features-scroll {
+  flex: 1;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.features-content {
+  padding: 40rpx 30rpx calc(150rpx + env(safe-area-inset-bottom));
+  max-width: 750rpx;
+  margin: 0 auto;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  background: #fff;
+  border-radius: 32rpx;
+  padding: 50rpx 45rpx;
+  margin-bottom: 50rpx;
+  box-shadow: 0 12rpx 40rpx rgba(0, 120, 212, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  margin-right: 32rpx;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 70rpx;
+  background: linear-gradient(135deg, #0078D4 0%, #005A9E 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(0, 120, 212, 0.25);
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.avatar-text {
+  font-size: 56rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.user-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.nickname {
+  font-size: 42rpx;
+  font-weight: bold;
+  color: #1a1a1a;
+  letter-spacing: 1rpx;
+}
+
+.greeting {
+  font-size: 28rpx;
+  color: #888;
+  letter-spacing: 0.5rpx;
+}
+
+/* 退出登录按钮区域 */
+.logout-btn-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 750rpx;
+  padding: 30rpx 30rpx calc(30rpx + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(240, 244, 248, 0) 0%, rgba(240, 244, 248, 0.95) 20%, rgba(240, 244, 248, 1) 100%);
+  z-index: 100;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+.logout-btn {
+  width: 100%;
+  height: 88rpx;
+  background: #fff;
+  border: 2rpx solid #e8ecf1;
+  border-radius: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 30rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.logout-btn::after {
+  border: none;
+}
+
+.logout-btn:active {
+  background: #f5f7fa;
+  color: #666;
+  transform: scale(0.98);
+}
+
+.logout-icon-text {
+  font-size: 32rpx;
+  margin-right: 12rpx;
+}
+
+/* 功能区域 */
+.features-section {
+  width: 100%;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30rpx;
+  gap: 20rpx;
+  width: 100%;
+}
+
+.title-text {
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.15);
+  letter-spacing: 2rpx;
+}
+
+.title-line {
+  flex: 1;
+  height: 4rpx;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: 2rpx;
+}
+
+/* 功能卡片 */
+.feature-card {
+  background: #fff;
+  border-radius: 28rpx;
+  padding: 36rpx 32rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feature-card:last-of-type {
+  margin-bottom: 0;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6rpx;
+  background: linear-gradient(90deg, #0078D4 0%, #005A9E 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feature-card.primary::before {
+  opacity: 1;
+}
+
+.feature-card:active {
+  transform: translateY(-6rpx);
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.12);
+}
+
+.card-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 20rpx;
+  background: linear-gradient(135deg, rgba(0, 120, 212, 0.08) 0%, rgba(0, 90, 158, 0.08) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  flex-shrink: 0;
+}
+
+.feature-card.primary .card-icon {
+  background: linear-gradient(135deg, #0078D4 0%, #005A9E 100%);
+  box-shadow: 0 4rpx 16rpx rgba(0, 120, 212, 0.25);
+}
+
+.card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.card-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1a1a1a;
+  letter-spacing: 0.5rpx;
+}
+
+.card-desc {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  letter-spacing: 0.5rpx;
+}
+
+.card-tags {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+  margin-top: 16rpx;
+}
+
+.tag {
+  padding: 8rpx 16rpx;
+  background: rgba(0, 120, 212, 0.08);
+  border-radius: 8rpx;
+  font-size: 22rpx;
+  color: #0078D4;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* 支付金额显示 */
+.pay-amount-display {
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+  margin-top: 12rpx;
+}
+
+.pay-label {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.pay-value {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+/* 底部信息 */
+.footer-info {
+  text-align: center;
+  padding: 40rpx 0;
+  width: 100%;
+}
+
+.footer-text {
+  font-size: 24rpx;
+  color: #999;
+}

@@ -1,0 +1,32 @@
+# MacroData港險從業者辦公助手 - Robots.txt
+# Welcome all search engine crawlers
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://harry.xingke888.com/sitemap.xml
+
+# Crawl delay (optional, be polite to servers)
+Crawl-delay: 1
+
+# Allow all major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Sogou
+Allow: /
+
+# Disallow sensitive paths (if any in the future)
+# User-agent: *
+# Disallow: /admin/
+# Disallow: /api/auth/

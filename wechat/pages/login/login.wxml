@@ -1,0 +1,40 @@
+<!--login.wxml-->
+<view class="login-container">
+  <view class="login-content">
+    <!-- Logo区域 -->
+    <view class="logo-section">
+      <view class="logo-placeholder">🚀</view>
+      <text class="app-name">企业AI办公助手</text>
+      <text class="app-slogan">智能办公 · 高效协同</text>
+    </view>
+
+    <!-- 登录信息 -->
+    <view class="login-info">
+      <text class="login-title">欢迎使用</text>
+      <text class="login-desc">开启智能办公新体验</text>
+    </view>
+
+    <!-- 微信快速登录按钮 -->
+    <button
+      class="login-btn {{!agreed ? 'disabled' : ''}}"
+      bindtap="{{agreed ? 'handleLogin' : 'showAgreementTip'}}"
+      loading="{{loading}}">
+      微信快速登录
+    </button>
+
+    <!-- 用户协议 -->
+    <view class="agreement">
+      <view class="checkbox-wrapper" bindtap="toggleAgreement">
+        <view class="checkbox {{agreed ? 'checked' : ''}}">
+          <text class="checkbox-icon" wx:if="{{agreed}}">✓</text>
+        </view>
+      </view>
+      <view class="agreement-content">
+        <text class="agreement-text">我已阅读并同意</text>
+        <text class="agreement-link" catchtap="handleAgreement">《用户协议》</text>
+        <text class="agreement-text">和</text>
+        <text class="agreement-link" catchtap="handlePrivacy">《隐私政策》</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,106 @@
+<!--index.wxml-->
+<view class="page">
+  <!-- 顶部背景渐变 -->
+  <view class="header-bg"></view>
+
+  <!-- 用户信息卡片 - 固定不滚动 -->
+  <view class="user-section">
+    <view class="user-card">
+      <view class="user-info">
+        <view class="avatar-wrapper" wx:if="{{!userInfo.avatar}}">
+          <view class="avatar">
+            <text class="avatar-text">{{userInfo.nickname ? userInfo.nickname.substr(0,1) : '用'}}</text>
+          </view>
+        </view>
+        <view class="avatar-wrapper" wx:else>
+          <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+        </view>
+        <view class="user-text">
+          <text class="nickname">{{userInfo.nickname || '微信用户'}}</text>
+          <text class="greeting">{{greeting}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能区域 - 可滚动 -->
+  <scroll-view class="features-scroll" scroll-y="{{true}}" enhanced="{{true}}" show-scrollbar="{{false}}">
+    <view class="features-content">
+      <view class="features-section">
+        <view class="section-title">
+          <text class="title-text">核心功能</text>
+          <view class="title-line"></view>
+        </view>
+
+      <!-- 文案助手 -->
+      <view class="feature-card primary" bindtap="handleCopywriter">
+        <view class="card-icon">✍️</view>
+        <view class="card-content">
+          <view class="card-title">文案助手</view>
+          <view class="card-desc">AI智能创作营销文案，提升传播效果</view>
+          <view class="card-tags">
+            <text class="tag">AI创作</text>
+            <text class="tag">多场景</text>
+            <text class="tag">高质量</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 计划书分析工具 -->
+      <view class="feature-card" bindtap="handleOpenWebView">
+        <view class="card-icon">📊</view>
+        <view class="card-content">
+          <view class="card-title">计划书分析工具</view>
+          <view class="card-desc">分析计划书，计划书概要，问答</view>
+          <view class="card-tags">
+            <text class="tag">智能分析</text>
+            <text class="tag">个性化报表数据提取</text>
+            <text class="tag">计划书概要</text>
+            <text class="tag">多计划书比对</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 电子名片 - 隐藏 -->
+      <view class="feature-card" bindtap="handleBusinessCard" wx:if="{{false}}">
+        <view class="card-icon">👤</view>
+        <view class="card-content">
+          <view class="card-title">电子名片</view>
+          <view class="card-desc">智能生成专属名片，一键分享个人信息</view>
+          <view class="card-tags">
+            <text class="tag">快速生成</text>
+            <text class="tag">在线分享</text>
+            <text class="tag">专业形象</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 支付功能 - 隐藏 -->
+      <view class="feature-card" bindtap="handlePay" wx:if="{{false}}">
+        <view class="card-icon">💳</view>
+        <view class="card-content">
+          <view class="card-title">微信支付</view>
+          <view class="card-desc">便捷安全的支付体验</view>
+          <view class="pay-amount-display">
+            <text class="pay-label">测试金额</text>
+            <text class="pay-value">¥1.00</text>
+          </view>
+        </view>
+      </view>
+      </view>
+
+      <!-- 底部信息 -->
+      <view class="footer-info">
+        <text class="footer-text">计划书工具小程序 v1.0</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>
+
+<!-- 退出登录按钮 -->
+<view class="logout-btn-wrapper">
+  <button class="logout-btn" bindtap="handleLogout">
+    <text class="logout-icon-text">⎋</text>
+    <text>退出登录</text>
+  </button>
+</view>

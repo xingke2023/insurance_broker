@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麦克风测试工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 10px 5px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+        }
+        .error {
+            background: #ffebee;
+            border-left-color: #f44336;
+        }
+        .success {
+            background: #e8f5e9;
+            border-left-color: #4CAF50;
+        }
+        #volumeMeter {
+            width: 100%;
+            height: 50px;
+            background: #eee;
+            margin: 20px 0;
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+        #volumeBar {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #FFC107, #F44336);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        #volumeText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 麦克风测试工具</h1>
+
+        <div id="status" class="status">等待开始测试...</div>
+
+        <div>
+            <label for="audioDevice"><strong>选择麦克风设备：</strong></label>
+            <select id="audioDevice"></select>
+        </div>
+
+        <div id="volumeMeter">
+            <div id="volumeBar"></div>
+            <div id="volumeText">0 dB</div>
+        </div>
+
+        <div>
+            <button id="startTest">开始测试</button>
+            <button id="stopTest" disabled>停止测试</button>
+            <button id="startRecord" disabled>开始录音</button>
+            <button id="stopRecord" disabled>停止录音</button>
+            <button id="playRecord" disabled>播放录音</button>
+        </div>
+
+        <audio id="audioPlayer" controls style="width: 100%; margin-top: 20px; display: none;"></audio>
+
+        <div style="margin-top: 30px; padding: 15px; background: #f9f9f9; border-radius: 5px;">
+            <h3>说明：</h3>
+            <ol>
+                <li>点击"开始测试"，浏览器会请求麦克风权限</li>
+                <li>对着麦克风说话，观察音量条是否有变化</li>
+                <li>如果音量条没有变化，说明麦克风没有声音输入</li>
+                <li>点击"开始录音"进行录制，然后"停止录音"</li>
+                <li>点击"播放录音"检查录音是否有声音</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        let audioContext;
+        let analyser;
+        let microphone;
+        let mediaRecorder;
+        let recordedChunks = [];
+        let stream;
+
+        const statusDiv = document.getElementById('status');
+        const volumeBar = document.getElementById('volumeBar');
+        const volumeText = document.getElementById('volumeText');
+        const audioDeviceSelect = document.getElementById('audioDevice');
+        const audioPlayer = document.getElementById('audioPlayer');
+
+        // 获取音频设备列表
+        async function getAudioDevices() {
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const audioInputs = devices.filter(device => device.kind === 'audioinput');
+
+                audioDeviceSelect.innerHTML = '';
+                audioInputs.forEach(device => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.text = device.label || `麦克风 ${audioInputs.indexOf(device) + 1}`;
+                    audioDeviceSelect.appendChild(option);
+                });
+
+                if (audioInputs.length === 0) {
+                    showStatus('未检测到麦克风设备！', 'error');
+                } else {
+                    showStatus(`检测到 ${audioInputs.length} 个麦克风设备`, 'success');
+                }
+            } catch (error) {
+                showStatus('无法获取设备列表: ' + error.message, 'error');
+            }
+        }
+
+        function showStatus(message, type = 'info') {
+            statusDiv.textContent = message;
+            statusDiv.className = 'status';
+            if (type === 'error') statusDiv.classList.add('error');
+            if (type === 'success') statusDiv.classList.add('success');
+        }
+
+        document.getElementById('startTest').addEventListener('click', async () => {
+            try {
+                const deviceId = audioDeviceSelect.value;
+                const constraints = deviceId ?
+                    { audio: { deviceId: { exact: deviceId } } } :
+                    { audio: true };
+
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+                showStatus('✅ 麦克风访问成功！开始监测音量...', 'success');
+
+                // 创建音频上下文
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                microphone.connect(analyser);
+                analyser.fftSize = 256;
+
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+
+                // 实时显示音量
+                function updateVolume() {
+                    analyser.getByteFrequencyData(dataArray);
+                    const average = dataArray.reduce((a, b) => a + b) / bufferLength;
+                    const percent = (average / 255) * 100;
+                    const db = Math.round(20 * Math.log10(average / 255));
+
+                    volumeBar.style.width = percent + '%';
+                    volumeText.textContent = isFinite(db) ? db + ' dB' : '-∞ dB';
+
+                    if (stream && stream.active) {
+                        requestAnimationFrame(updateVolume);
+                    }
+                }
+                updateVolume();
+
+                document.getElementById('startTest').disabled = true;
+                document.getElementById('stopTest').disabled = false;
+                document.getElementById('startRecord').disabled = false;
+
+                await getAudioDevices();
+
+            } catch (error) {
+                showStatus('❌ 麦克风访问失败: ' + error.message, 'error');
+                console.error('Error:', error);
+            }
+        });
+
+        document.getElementById('stopTest').addEventListener('click', () => {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+
+            volumeBar.style.width = '0%';
+            volumeText.textContent = '0 dB';
+
+            showStatus('测试已停止', 'info');
+
+            document.getElementById('startTest').disabled = false;
+            document.getElementById('stopTest').disabled = true;
+            document.getElementById('startRecord').disabled = true;
+            document.getElementById('stopRecord').disabled = true;
+        });
+
+        document.getElementById('startRecord').addEventListener('click', () => {
+            if (!stream) return;
+
+            recordedChunks = [];
+
+            const options = { mimeType: 'audio/webm' };
+            if (!MediaRecorder.isTypeSupported('audio/webm')) {
+                options.mimeType = 'audio/mp4';
+            }
+
+            mediaRecorder = new MediaRecorder(stream, options);
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType });
+                const url = URL.createObjectURL(blob);
+                audioPlayer.src = url;
+                audioPlayer.style.display = 'block';
+                document.getElementById('playRecord').disabled = false;
+                showStatus('✅ 录音完成！点击"播放录音"检查录音效果', 'success');
+            };
+
+            mediaRecorder.start();
+            showStatus('🔴 正在录音...', 'info');
+
+            document.getElementById('startRecord').disabled = true;
+            document.getElementById('stopRecord').disabled = false;
+        });
+
+        document.getElementById('stopRecord').addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                document.getElementById('startRecord').disabled = false;
+                document.getElementById('stopRecord').disabled = true;
+            }
+        });
+
+        document.getElementById('playRecord').addEventListener('click', () => {
+            audioPlayer.play();
+        });
+
+        // 页面加载时获取设备列表
+        getAudioDevices();
+    </script>
+</body>
+</html>

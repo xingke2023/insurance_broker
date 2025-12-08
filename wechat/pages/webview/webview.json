@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "企业AI办公助手",
+  "navigationBarBackgroundColor": "#ffffff",
+  "navigationBarTextStyle": "black",
+  "renderer": "webview",
+  "componentFramework": "exparser",
+  "enableShareAppMessage": true,
+  "enableShareTimeline": true
+}

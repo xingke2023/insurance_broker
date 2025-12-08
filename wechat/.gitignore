@@ -1,0 +1,21 @@
+# 依赖目录
+node_modules/
+miniprogram_npm/
+
+# 日志文件
+*.log
+npm-debug.log*
+
+# 编辑器和IDE配置
+.DS_Store
+.idea/
+*.swp
+*.swo
+*~
+
+# 微信开发者工具生成的文件
+project.private.config.json
+
+# 临时文件
+.tmp/
+.cache/

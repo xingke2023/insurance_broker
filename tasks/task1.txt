@@ -1,0 +1,7 @@
+数据库表insurance_companies增加一个字段叫做StandardSurrenderPolicy 字段格式是longtext
+存储的是各个保险公司的标准退保数据，从第一年到第100年，这个字段是可以在admin后台添加的
+数据格式是
+{"standard": [{"policy_year": 1, "guaranteed": 0, "non_guaranteed": 0, "total": 0}, {"policy_year": 2, "guaranteed": 2500, "non_guaranteed": 19200, "total": 21700}, {"policy_year": 3, "guaranteed": 12500, "non_guaranteed": 40068, "total": 52568}]}
+
+dashboard新加一个页面，参考plan-management頁面的產品對比，只不过比较的是各个保险公司的数据，也就是数据库表insurance_companies的字段StandardSurrenderPolicy，11个保险公司，每个保险公司有一个数据
+然后勾选哪家，就显示哪家的对比，哪家没有数据或者数据为空，那么这家就用灰色表示不能勾选，有数据的可以被勾选

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文档详情测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .test-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .test-link {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s;
+        }
+        .test-link:hover {
+            background: #e9ecef;
+            border-color: #007bff;
+            transform: translateX(5px);
+        }
+        .link-icon {
+            width: 40px;
+            height: 40px;
+            background: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+        .link-info {
+            flex: 1;
+        }
+        .link-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .link-desc {
+            font-size: 14px;
+            color: #666;
+        }
+        .api-test {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+        .api-test h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        #result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+        }
+        .debug-info {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            border: 1px solid #ffc107;
+        }
+        .debug-info h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        .debug-info ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📄 文档详情页面测试</h1>
+
+        <div class="info">
+            <strong>测试目的：</strong>验证文档详情页面是否能正确加载和显示数据
+        </div>
+
+        <h2>🔗 快速访问链接</h2>
+        <div class="test-links">
+            <a href="/plan-management" class="test-link">
+                <div class="link-icon">📋</div>
+                <div class="link-info">
+                    <div class="link-title">文档管理页面</div>
+                    <div class="link-desc">查看所有文档列表，点击"详情"按钮跳转到详情页</div>
+                </div>
+            </a>
+
+            <a href="/document/43" class="test-link">
+                <div class="link-icon">43</div>
+                <div class="link-info">
+                    <div class="link-title">文档 #43 详情页</div>
+                    <div class="link-desc">3岁 女 盛利2 5w年缴4_compressed.pdf</div>
+                </div>
+            </a>
+
+            <a href="/document/42" class="test-link">
+                <div class="link-icon">42</div>
+                <div class="link-info">
+                    <div class="link-title">文档 #42 详情页</div>
+                    <div class="link-desc">3岁 女 盛利2 5w年缴4_compressed.pdf</div>
+                </div>
+            </a>
+
+            <a href="/document/41" class="test-link">
+                <div class="link-icon">41</div>
+                <div class="link-info">
+                    <div class="link-title">文档 #41 详情页</div>
+                    <div class="link-desc">3岁 女 盛利2 5w年缴4_compressed.pdf</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="api-test">
+            <h2>🧪 API 测试</h2>
+            <button onclick="testAPI(43)">测试文档 #43 API</button>
+            <button onclick="testAPI(42)">测试文档 #42 API</button>
+            <button onclick="testListAPI()">测试文档列表 API</button>
+            <div id="result"></div>
+        </div>
+
+        <div class="debug-info">
+            <h3>🔍 调试步骤</h3>
+            <ol>
+                <li>打开浏览器开发者工具（F12）</li>
+                <li>切换到 Console 标签页</li>
+                <li>点击上面的链接访问文档详情页</li>
+                <li>查看控制台输出的调试信息：
+                    <ul>
+                        <li>📡 正在获取文档详情，ID: XX</li>
+                        <li>📦 API返回数据: {...}</li>
+                        <li>✅ 文档数据加载成功</li>
+                        <li>🔍 渲染行数据: {...}</li>
+                    </ul>
+                </li>
+                <li>检查是否显示了四个卡片：
+                    <ul>
+                        <li>基本信息</li>
+                        <li>计划书概要（如有数据）</li>
+                        <li>保单年度储蓄计划</li>
+                        <li>计划书内容</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h3>⚠️ 常见问题</h3>
+            <ul>
+                <li><strong>404 错误：</strong>确认文档 ID 存在于数据库中</li>
+                <li><strong>表格不显示：</strong>检查 document.table.years 数组是否有数据</li>
+                <li><strong>数据显示为 "-"：</strong>字段值为 null 或 undefined</li>
+                <li><strong>控制台报错：</strong>查看具体错误信息并排查</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI(docId) {
+            const result = document.getElementById('result');
+            result.textContent = '正在请求...';
+
+            try {
+                const response = await fetch(`/api/ocr/documents/${docId}/`);
+                const data = await response.json();
+
+                result.textContent = JSON.stringify(data, null, 2);
+
+                if (data.status === 'success') {
+                    result.style.background = '#d4edda';
+                    result.style.borderColor = '#c3e6cb';
+                } else {
+                    result.style.background = '#f8d7da';
+                    result.style.borderColor = '#f5c6cb';
+                }
+            } catch (error) {
+                result.textContent = `错误: ${error.message}`;
+                result.style.background = '#f8d7da';
+                result.style.borderColor = '#f5c6cb';
+            }
+        }
+
+        async function testListAPI() {
+            const result = document.getElementById('result');
+            result.textContent = '正在请求...';
+
+            try {
+                const response = await fetch('/api/ocr/documents/?user_id=5');
+                const data = await response.json();
+
+                result.textContent = JSON.stringify(data, null, 2);
+
+                if (data.status === 'success') {
+                    result.style.background = '#d4edda';
+                    result.style.borderColor = '#c3e6cb';
+                } else {
+                    result.style.background = '#f8d7da';
+                    result.style.borderColor = '#f5c6cb';
+                }
+            } catch (error) {
+                result.textContent = `错误: ${error.message}`;
+                result.style.background = '#f8d7da';
+                result.style.borderColor = '#f5c6cb';
+            }
+        }
+    </script>
+</body>
+</html>
