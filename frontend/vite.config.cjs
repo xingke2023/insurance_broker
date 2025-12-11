@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+const { defineConfig } = require('vite');
+const react = require('@vitejs/plugin-react').default;
 
 // https://vite.dev/config/
-export default defineConfig({
+module.exports = defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
@@ -16,11 +16,16 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
-    minify: 'esbuild',
+    minify: 'terser',
     rollupOptions: {
       output: {
         manualChunks: undefined
       }
     }
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'esnext'
+    }
   }
-})
+});

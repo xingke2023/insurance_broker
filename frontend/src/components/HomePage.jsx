@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import { useAppNavigate } from '../hooks/useAppNavigate';
@@ -24,6 +24,16 @@ function HomePage() {
   const [showRegister, setShowRegister] = useState(false);
   const { user, isAuthenticated } = useAuth();
 
+  // 检测URL参数，如果有login=true则自动显示登录框
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('login') === 'true') {
+      setShowLogin(true);
+      // 清除URL参数
+      window.history.replaceState({}, '', '/');
+    }
+  }, []);
+
   const handleLanguageChange = (lang) => {
     i18n.changeLanguage(lang);
   };
@@ -35,7 +45,7 @@ function HomePage() {
       tools: [
         { name: '计划书管理', icon: Folder, action: () => isAuthenticated ? onNavigate('plan-management') : setShowLogin(true), color: 'from-blue-500 via-blue-600 to-indigo-700' },
         { name: '计划书分步骤分析', icon: FileText, action: () => isAuthenticated ? onNavigate('plan-analyzer-2') : setShowLogin(true), color: 'from-indigo-500 via-purple-600 to-purple-700' },
-        { name: '计划书制作', icon: FileText, action: () => isAuthenticated ? onNavigate('plan-builder') : setShowLogin(true), color: 'from-purple-500 via-purple-600 to-pink-700' },
+        { name: '各公司保险产品对比', icon: FileText, action: () => onNavigate('company-comparison'), color: 'from-purple-500 via-purple-600 to-pink-700' },
       ]
     },
     {

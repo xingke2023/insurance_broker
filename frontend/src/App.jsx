@@ -35,6 +35,7 @@ function App() {
             {/* 公开页面 - 无需登录 */}
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
+            <Route path="/company-comparison" element={<CompanyComparison />} />
 
             {/* 受保护的页面 - 需要登录 */}
             <Route path="/dashboard" element={
@@ -145,11 +146,6 @@ function App() {
             <Route path="/api-call/:companyCode/:requestName" element={
               <ProtectedRoute>
                 <ApiCallPage />
-              </ProtectedRoute>
-            } />
-            <Route path="/company-comparison" element={
-              <ProtectedRoute>
-                <CompanyComparison />
               </ProtectedRoute>
             } />
 

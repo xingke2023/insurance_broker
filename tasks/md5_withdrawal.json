@@ -1,0 +1,1084 @@
+{
+  "withdrawal_realization": [
+    {
+      "policy_year": 1,
+      "premiums_paid": 10000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 0,
+      "guaranteed": 0,
+      "non_guaranteed_bc": 0,
+      "total": 0
+    },
+    {
+      "policy_year": 2,
+      "premiums_paid": 20000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 0,
+      "guaranteed": 500,
+      "non_guaranteed_bc": 4000,
+      "total": 4500
+    },
+    {
+      "policy_year": 3,
+      "premiums_paid": 30000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 0,
+      "guaranteed": 2500,
+      "non_guaranteed_bc": 8368,
+      "total": 10868
+    },
+    {
+      "policy_year": 4,
+      "premiums_paid": 40000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 0,
+      "guaranteed": 5000,
+      "non_guaranteed_bc": 13137,
+      "total": 18137
+    },
+    {
+      "policy_year": 5,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 1809,
+      "accumulated_ng_withdrawal": 1809,
+      "guaranteed": 12500,
+      "non_guaranteed_bc": 16284,
+      "total": 28784
+    },
+    {
+      "policy_year": 6,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 2403,
+      "accumulated_ng_withdrawal": 4212,
+      "guaranteed": 24000,
+      "non_guaranteed_bc": 21628,
+      "total": 45628
+    },
+    {
+      "policy_year": 7,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 2501,
+      "accumulated_ng_withdrawal": 6714,
+      "guaranteed": 26000,
+      "non_guaranteed_bc": 22510,
+      "total": 48510
+    },
+    {
+      "policy_year": 8,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 2661,
+      "accumulated_ng_withdrawal": 9374,
+      "guaranteed": 27500,
+      "non_guaranteed_bc": 23948,
+      "total": 51448
+    },
+    {
+      "policy_year": 9,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 2649,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 28250,
+      "non_guaranteed_bc": 23837,
+      "total": 52087
+    },
+    {
+      "policy_year": 10,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 30000,
+      "non_guaranteed_bc": 24552,
+      "total": 54552
+    },
+    {
+      "policy_year": 11,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 32375,
+      "non_guaranteed_bc": 30195,
+      "total": 62570
+    },
+    {
+      "policy_year": 12,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 34125,
+      "non_guaranteed_bc": 33531,
+      "total": 67656
+    },
+    {
+      "policy_year": 13,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 36250,
+      "non_guaranteed_bc": 37317,
+      "total": 73567
+    },
+    {
+      "policy_year": 14,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 38500,
+      "non_guaranteed_bc": 38803,
+      "total": 77303
+    },
+    {
+      "policy_year": 15,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 40875,
+      "non_guaranteed_bc": 40519,
+      "total": 81394
+    },
+    {
+      "policy_year": 16,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 43750,
+      "non_guaranteed_bc": 41730,
+      "total": 85480
+    },
+    {
+      "policy_year": 17,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 47000,
+      "non_guaranteed_bc": 43206,
+      "total": 90206
+    },
+    {
+      "policy_year": 18,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 50000,
+      "non_guaranteed_bc": 45466,
+      "total": 95466
+    },
+    {
+      "policy_year": 19,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 53000,
+      "non_guaranteed_bc": 48553,
+      "total": 101553
+    },
+    {
+      "policy_year": 20,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 54000,
+      "non_guaranteed_bc": 53022,
+      "total": 107022
+    },
+    {
+      "policy_year": 21,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 54592,
+      "non_guaranteed_bc": 57922,
+      "total": 112514
+    },
+    {
+      "policy_year": 22,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 54947,
+      "non_guaranteed_bc": 63307,
+      "total": 118254
+    },
+    {
+      "policy_year": 23,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 55304,
+      "non_guaranteed_bc": 68970,
+      "total": 124274
+    },
+    {
+      "policy_year": 24,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 55664,
+      "non_guaranteed_bc": 74952,
+      "total": 130616
+    },
+    {
+      "policy_year": 25,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 56026,
+      "non_guaranteed_bc": 81185,
+      "total": 137211
+    },
+    {
+      "policy_year": 26,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 56390,
+      "non_guaranteed_bc": 87748,
+      "total": 144137
+    },
+    {
+      "policy_year": 27,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 56756,
+      "non_guaranteed_bc": 94633,
+      "total": 151389
+    },
+    {
+      "policy_year": 28,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 57125,
+      "non_guaranteed_bc": 102452,
+      "total": 159577
+    },
+    {
+      "policy_year": 29,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 57496,
+      "non_guaranteed_bc": 111423,
+      "total": 168919
+    },
+    {
+      "policy_year": 30,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 57870,
+      "non_guaranteed_bc": 121147,
+      "total": 179017
+    },
+    {
+      "policy_year": 31,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 58246,
+      "non_guaranteed_bc": 131625,
+      "total": 189871
+    },
+    {
+      "policy_year": 32,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 58625,
+      "non_guaranteed_bc": 142978,
+      "total": 201602
+    },
+    {
+      "policy_year": 33,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 59006,
+      "non_guaranteed_bc": 155277,
+      "total": 214283
+    },
+    {
+      "policy_year": 34,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 59390,
+      "non_guaranteed_bc": 168525,
+      "total": 227914
+    },
+    {
+      "policy_year": 35,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 59776,
+      "non_guaranteed_bc": 182870,
+      "total": 242646
+    },
+    {
+      "policy_year": 36,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 60164,
+      "non_guaranteed_bc": 198405,
+      "total": 258569
+    },
+    {
+      "policy_year": 37,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 60555,
+      "non_guaranteed_bc": 215228,
+      "total": 275783
+    },
+    {
+      "policy_year": 38,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 60949,
+      "non_guaranteed_bc": 233446,
+      "total": 294394
+    },
+    {
+      "policy_year": 39,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 61345,
+      "non_guaranteed_bc": 253056,
+      "total": 314401
+    },
+    {
+      "policy_year": 40,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 61744,
+      "non_guaranteed_bc": 274283,
+      "total": 336027
+    },
+    {
+      "policy_year": 41,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 62145,
+      "non_guaranteed_bc": 297634,
+      "total": 359779
+    },
+    {
+      "policy_year": 42,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 62549,
+      "non_guaranteed_bc": 322909,
+      "total": 385458
+    },
+    {
+      "policy_year": 43,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 62956,
+      "non_guaranteed_bc": 350267,
+      "total": 413222
+    },
+    {
+      "policy_year": 44,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 63365,
+      "non_guaranteed_bc": 379704,
+      "total": 443068
+    },
+    {
+      "policy_year": 45,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 63777,
+      "non_guaranteed_bc": 411552,
+      "total": 475328
+    },
+    {
+      "policy_year": 46,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 64191,
+      "non_guaranteed_bc": 446008,
+      "total": 510199
+    },
+    {
+      "policy_year": 47,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 64608,
+      "non_guaranteed_bc": 483286,
+      "total": 547894
+    },
+    {
+      "policy_year": 48,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 65028,
+      "non_guaranteed_bc": 523617,
+      "total": 588645
+    },
+    {
+      "policy_year": 49,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 65451,
+      "non_guaranteed_bc": 567251,
+      "total": 632702
+    },
+    {
+      "policy_year": 50,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 65877,
+      "non_guaranteed_bc": 614175,
+      "total": 680052
+    },
+    {
+      "policy_year": 51,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 66338,
+      "non_guaranteed_bc": 665919,
+      "total": 732257
+    },
+    {
+      "policy_year": 52,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 66802,
+      "non_guaranteed_bc": 721875,
+      "total": 788676
+    },
+    {
+      "policy_year": 53,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 67270,
+      "non_guaranteed_bc": 782386,
+      "total": 849655
+    },
+    {
+      "policy_year": 54,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 67740,
+      "non_guaranteed_bc": 847822,
+      "total": 915562
+    },
+    {
+      "policy_year": 55,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 68215,
+      "non_guaranteed_bc": 918584,
+      "total": 986799
+    },
+    {
+      "policy_year": 56,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 68692,
+      "non_guaranteed_bc": 995107,
+      "total": 1063799
+    },
+    {
+      "policy_year": 57,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 69173,
+      "non_guaranteed_bc": 1077859,
+      "total": 1147032
+    },
+    {
+      "policy_year": 58,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 69657,
+      "non_guaranteed_bc": 1167347,
+      "total": 1237004
+    },
+    {
+      "policy_year": 59,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 70145,
+      "non_guaranteed_bc": 1264119,
+      "total": 1334263
+    },
+    {
+      "policy_year": 60,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 70636,
+      "non_guaranteed_bc": 1368768,
+      "total": 1439403
+    },
+    {
+      "policy_year": 61,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 71130,
+      "non_guaranteed_bc": 1481067,
+      "total": 1552197
+    },
+    {
+      "policy_year": 62,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 71628,
+      "non_guaranteed_bc": 1602395,
+      "total": 1674023
+    },
+    {
+      "policy_year": 63,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 72130,
+      "non_guaranteed_bc": 1733477,
+      "total": 1805607
+    },
+    {
+      "policy_year": 64,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 72635,
+      "non_guaranteed_bc": 1875099,
+      "total": 1947733
+    },
+    {
+      "policy_year": 65,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 73143,
+      "non_guaranteed_bc": 2028107,
+      "total": 2101249
+    },
+    {
+      "policy_year": 66,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 73655,
+      "non_guaranteed_bc": 2193416,
+      "total": 2267071
+    },
+    {
+      "policy_year": 67,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 74171,
+      "non_guaranteed_bc": 2372017,
+      "total": 2446188
+    },
+    {
+      "policy_year": 68,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 74690,
+      "non_guaranteed_bc": 2564977,
+      "total": 2639667
+    },
+    {
+      "policy_year": 69,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 75213,
+      "non_guaranteed_bc": 2744666,
+      "total": 2819878
+    },
+    {
+      "policy_year": 70,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 75739,
+      "non_guaranteed_bc": 2927431,
+      "total": 3003170
+    },
+    {
+      "policy_year": 71,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 76269,
+      "non_guaranteed_bc": 3122107,
+      "total": 3198376
+    },
+    {
+      "policy_year": 72,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 76803,
+      "non_guaranteed_bc": 3329468,
+      "total": 3406271
+    },
+    {
+      "policy_year": 73,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 77341,
+      "non_guaranteed_bc": 3550338,
+      "total": 3627678
+    },
+    {
+      "policy_year": 74,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 77882,
+      "non_guaranteed_bc": 3785596,
+      "total": 3863478
+    },
+    {
+      "policy_year": 75,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 78427,
+      "non_guaranteed_bc": 4036177,
+      "total": 4114604
+    },
+    {
+      "policy_year": 76,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 78976,
+      "non_guaranteed_bc": 4303077,
+      "total": 4382053
+    },
+    {
+      "policy_year": 77,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 79529,
+      "non_guaranteed_bc": 4587357,
+      "total": 4666886
+    },
+    {
+      "policy_year": 78,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 80086,
+      "non_guaranteed_bc": 4890149,
+      "total": 4970234
+    },
+    {
+      "policy_year": 79,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 80646,
+      "non_guaranteed_bc": 5212653,
+      "total": 5293299
+    },
+    {
+      "policy_year": 80,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 81211,
+      "non_guaranteed_bc": 5556154,
+      "total": 5637364
+    },
+    {
+      "policy_year": 81,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 81779,
+      "non_guaranteed_bc": 5922013,
+      "total": 6003792
+    },
+    {
+      "policy_year": 82,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 82352,
+      "non_guaranteed_bc": 6311688,
+      "total": 6394039
+    },
+    {
+      "policy_year": 83,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 82928,
+      "non_guaranteed_bc": 6726724,
+      "total": 6809652
+    },
+    {
+      "policy_year": 84,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 83509,
+      "non_guaranteed_bc": 7168771,
+      "total": 7252279
+    },
+    {
+      "policy_year": 85,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 84093,
+      "non_guaranteed_bc": 7639584,
+      "total": 7723677
+    },
+    {
+      "policy_year": 86,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 84682,
+      "non_guaranteed_bc": 8141035,
+      "total": 8225716
+    },
+    {
+      "policy_year": 87,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 85275,
+      "non_guaranteed_bc": 8675114,
+      "total": 8760388
+    },
+    {
+      "policy_year": 88,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 85872,
+      "non_guaranteed_bc": 9243942,
+      "total": 9329813
+    },
+    {
+      "policy_year": 89,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 86473,
+      "non_guaranteed_bc": 9849779,
+      "total": 9936251
+    },
+    {
+      "policy_year": 90,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 87078,
+      "non_guaranteed_bc": 10495029,
+      "total": 10582107
+    },
+    {
+      "policy_year": 91,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 87688,
+      "non_guaranteed_bc": 11182257,
+      "total": 11269944
+    },
+    {
+      "policy_year": 92,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 88301,
+      "non_guaranteed_bc": 11914190,
+      "total": 12002491
+    },
+    {
+      "policy_year": 93,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 88920,
+      "non_guaranteed_bc": 12693734,
+      "total": 12782653
+    },
+    {
+      "policy_year": 94,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 89542,
+      "non_guaranteed_bc": 13523984,
+      "total": 13613525
+    },
+    {
+      "policy_year": 95,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 90169,
+      "non_guaranteed_bc": 14408236,
+      "total": 14498404
+    },
+    {
+      "policy_year": 96,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 90800,
+      "non_guaranteed_bc": 15350001,
+      "total": 15440800
+    },
+    {
+      "policy_year": 97,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 91436,
+      "non_guaranteed_bc": 16353018,
+      "total": 16444453
+    },
+    {
+      "policy_year": 98,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 92076,
+      "non_guaranteed_bc": 17421267,
+      "total": 17513342
+    },
+    {
+      "policy_year": 99,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 92720,
+      "non_guaranteed_bc": 18558989,
+      "total": 18651709
+    },
+    {
+      "policy_year": 100,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 93369,
+      "non_guaranteed_bc": 19770701,
+      "total": 19864070
+    },
+    {
+      "policy_year": 101,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 94023,
+      "non_guaranteed_bc": 21061213,
+      "total": 21155235
+    },
+    {
+      "policy_year": 102,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 94681,
+      "non_guaranteed_bc": 22435645,
+      "total": 22530325
+    },
+    {
+      "policy_year": 103,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 95344,
+      "non_guaranteed_bc": 23899454,
+      "total": 23994797
+    },
+    {
+      "policy_year": 104,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 96011,
+      "non_guaranteed_bc": 25458447,
+      "total": 25554458
+    },
+    {
+      "policy_year": 105,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 96683,
+      "non_guaranteed_bc": 27118815,
+      "total": 27215498
+    },
+    {
+      "policy_year": 106,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 97360,
+      "non_guaranteed_bc": 28887146,
+      "total": 28984506
+    },
+    {
+      "policy_year": 107,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 98042,
+      "non_guaranteed_bc": 30770457,
+      "total": 30868498
+    },
+    {
+      "policy_year": 108,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 98728,
+      "non_guaranteed_bc": 32776223,
+      "total": 32874951
+    },
+    {
+      "policy_year": 109,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 99419,
+      "non_guaranteed_bc": 34912404,
+      "total": 35011823
+    },
+    {
+      "policy_year": 110,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 100115,
+      "non_guaranteed_bc": 37187476,
+      "total": 37287591
+    },
+    {
+      "policy_year": 111,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 100816,
+      "non_guaranteed_bc": 39610469,
+      "total": 39711285
+    },
+    {
+      "policy_year": 112,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 101522,
+      "non_guaranteed_bc": 42190997,
+      "total": 42292518
+    },
+    {
+      "policy_year": 113,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 102232,
+      "non_guaranteed_bc": 44939300,
+      "total": 45041532
+    },
+    {
+      "policy_year": 114,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 102948,
+      "non_guaranteed_bc": 47866285,
+      "total": 47969232
+    },
+    {
+      "policy_year": 115,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 103668,
+      "non_guaranteed_bc": 50983564,
+      "total": 51087232
+    },
+    {
+      "policy_year": 116,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 104394,
+      "non_guaranteed_bc": 54303509,
+      "total": 54407902
+    },
+    {
+      "policy_year": 117,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 105125,
+      "non_guaranteed_bc": 57839291,
+      "total": 57944415
+    },
+    {
+      "policy_year": 118,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 105861,
+      "non_guaranteed_bc": 61604942,
+      "total": 61710802
+    },
+    {
+      "policy_year": 119,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 106602,
+      "non_guaranteed_bc": 65615404,
+      "total": 65722005
+    },
+    {
+      "policy_year": 120,
+      "premiums_paid": 50000,
+      "non_guaranteed_withdrawal": 0,
+      "accumulated_ng_withdrawal": 12023,
+      "guaranteed": 107348,
+      "non_guaranteed_bc": 69886588,
+      "total": 69993935
+    }
+  ]
+}

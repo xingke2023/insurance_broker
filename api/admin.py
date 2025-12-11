@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django import forms
-from .models import InsurancePolicy, PlanDocument, AnnualValue, MembershipPlan, UserQuota, GeminiUsage, MediaLibrary, InsuranceCompany, InsuranceCompanyRequest
+from .models import InsurancePolicy, PlanDocument, AnnualValue, MembershipPlan, UserQuota, GeminiUsage, MediaLibrary, InsuranceCompany, InsuranceProduct, InsuranceCompanyRequest
 import json
 
 
@@ -426,6 +426,15 @@ class MediaLibraryAdmin(admin.ModelAdmin):
 
 # ============ 保险公司接口配置管理 ============
 
+class InsuranceProductInline(admin.TabularInline):
+    """保险公司产品内联显示"""
+    model = InsuranceProduct
+    extra = 0
+    fields = ['product_name', 'payment_period', 'annual_premium', 'is_withdrawal', 'is_active', 'sort_order']
+    readonly_fields = []
+    show_change_link = True
+
+
 class InsuranceCompanyRequestInline(admin.TabularInline):
     """保险公司请求配置内联显示"""
     model = InsuranceCompanyRequest
@@ -438,14 +447,14 @@ class InsuranceCompanyRequestInline(admin.TabularInline):
 @admin.register(InsuranceCompany)
 class InsuranceCompanyAdmin(admin.ModelAdmin):
     """保险公司管理"""
-    list_display = ['code', 'name', 'name_en', 'icon_display', 'color_display', 'request_count', 'is_active', 'sort_order']
+    list_display = ['code', 'name', 'name_en', 'flagship_product', 'icon_display', 'color_display', 'request_count', 'is_active', 'sort_order']
     list_filter = ['is_active', 'created_at']
-    search_fields = ['code', 'name', 'name_en']
+    search_fields = ['code', 'name', 'name_en', 'flagship_product']
     ordering = ['sort_order', 'id']
 
     fieldsets = (
         ('基本信息', {
-            'fields': ('code', 'name', 'name_en', 'description'),
+            'fields': ('code', 'name', 'name_en', 'flagship_product', 'description'),
             'description': '保险公司的基本标识信息'
         }),
         ('显示设置', {
@@ -487,7 +496,7 @@ class InsuranceCompanyAdmin(admin.ModelAdmin):
     )
 
     readonly_fields = ['created_at', 'updated_at']
-    inlines = [InsuranceCompanyRequestInline]
+    inlines = [InsuranceProductInline, InsuranceCompanyRequestInline]
 
     def icon_display(self, obj):
         """图标显示"""
@@ -839,3 +848,95 @@ class InsuranceCompanyRequestAdmin(admin.ModelAdmin):
             'all': ('admin/css/insurance_company_admin.css',)
         }
         js = ('admin/js/insurance_company_admin.js',)
+
+
+@admin.register(InsuranceProduct)
+class InsuranceProductAdmin(admin.ModelAdmin):
+    """保险公司产品管理"""
+    list_display = [
+        'product_name',
+        'company_display',
+        'payment_period_display',
+        'annual_premium_display',
+        'is_withdrawal',
+        'is_active',
+        'sort_order',
+        'created_at'
+    ]
+    list_filter = ['company', 'is_withdrawal', 'is_active', 'payment_period', 'created_at']
+    search_fields = ['product_name', 'company__name', 'description']
+    ordering = ['company__sort_order', 'sort_order', 'product_name']
+
+    fieldsets = (
+        ('基本信息', {
+            'fields': ('company', 'product_name', 'description'),
+            'description': '产品的基本信息'
+        }),
+        ('保费信息', {
+            'fields': ('payment_period', 'annual_premium'),
+            'description': '缴费年期和年缴金额'
+        }),
+        ('退保价值表', {
+            'fields': ('surrender_value_table',),
+            'description': '<strong>退保发还金额表配置</strong><br>'
+                         '• 格式: JSON数组<br>'
+                         '• 示例: [{"year": 1, "guaranteed": 0, "non_guaranteed": 0, "total": 0}, {"year": 2, "guaranteed": 2500, "non_guaranteed": 19200, "total": 21700}]<br>'
+                         '• 字段说明：<br>'
+                         '  - year: 保单年度<br>'
+                         '  - guaranteed: 保证现金价值<br>'
+                         '  - non_guaranteed: 非保证现金价值<br>'
+                         '  - total: 总现金价值（预期价值）',
+            'classes': ('collapse',)
+        }),
+        ('身故赔偿表', {
+            'fields': ('death_benefit_table',),
+            'description': '<strong>身故保险赔偿表配置</strong><br>'
+                         '• 格式: JSON数组<br>'
+                         '• 示例: [{"year": 1, "benefit": 100000}, {"year": 2, "benefit": 150000}]<br>'
+                         '• 字段说明：<br>'
+                         '  - year: 保单年度<br>'
+                         '  - benefit: 身故赔偿金额',
+            'classes': ('collapse',)
+        }),
+        ('产品特性', {
+            'fields': ('is_withdrawal',),
+            'description': '是否包含提取功能'
+        }),
+        ('状态与排序', {
+            'fields': ('is_active', 'sort_order')
+        }),
+        ('时间信息', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    readonly_fields = ['created_at', 'updated_at']
+
+    def company_display(self, obj):
+        """保险公司显示"""
+        if obj.company:
+            return format_html(
+                '<span style="font-size: 1.2em;">{}</span> {}',
+                obj.company.icon or '🏢',
+                obj.company.name
+            )
+        return '-'
+    company_display.short_description = '保险公司'
+
+    def payment_period_display(self, obj):
+        """缴费年期显示"""
+        return format_html(
+            '<span style="color: #3498db; font-weight: bold;">{} 年</span>',
+            obj.payment_period
+        )
+    payment_period_display.short_description = '缴费年期'
+
+    def annual_premium_display(self, obj):
+        """年缴金额显示"""
+        formatted_amount = f'{obj.annual_premium:,.2f}'
+        return format_html(
+            '<span style="color: #27ae60; font-weight: bold;">¥{}</span>',
+            formatted_amount
+        )
+    annual_premium_display.short_description = '年缴金额'

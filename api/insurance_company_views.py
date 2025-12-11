@@ -29,6 +29,7 @@ def get_insurance_companies(request):
                 'color_gradient': company.color_gradient,
                 'bg_color': company.bg_color,
                 'description': company.description,
+                'flagship_product': company.flagship_product,
             })
 
         return Response({
@@ -44,28 +45,54 @@ def get_insurance_companies(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def get_companies_standard_comparison(request):
     """
     获取所有保险公司的标准退保数据用于对比
-    返回所有保险公司及其standard_surrender_policy数据
+    从 insurance_products 表获取数据，支持按缴费年限筛选
+    【公开API - 无需登录】
+
+    查询参数:
+        payment_period: 缴费年限（可选，默认5年）例如：1, 2, 5
     """
+    from .models import InsuranceProduct
+
     try:
+        # 获取缴费年限参数，默认为5年
+        payment_period = request.GET.get('payment_period', '5')
+        try:
+            payment_period = int(payment_period)
+        except ValueError:
+            payment_period = 5
+
         companies = InsuranceCompany.objects.filter(is_active=True).order_by('sort_order')
 
         company_list = []
         for company in companies:
-            # 解析 standard_surrender_policy JSON 数据
+            # 从 insurance_products 表查询该公司对应年期的产品
+            product = InsuranceProduct.objects.filter(
+                company=company,
+                payment_period=payment_period,
+                is_active=True
+            ).first()
+
+            # 解析产品的 surrender_value_table 数据
             standard_data = None
             has_data = False
+            product_name = company.flagship_product or ''
 
-            if company.standard_surrender_policy:
+            if product and product.surrender_value_table:
                 try:
-                    standard_data = json.loads(company.standard_surrender_policy)
+                    # surrender_value_table 是 TextField，存储 JSON 字符串
+                    surrender_table = json.loads(product.surrender_value_table)
+
                     # 检查是否有有效的数据
-                    if standard_data and isinstance(standard_data, dict) and 'standard' in standard_data:
-                        if isinstance(standard_data['standard'], list) and len(standard_data['standard']) > 0:
-                            has_data = True
+                    if surrender_table and isinstance(surrender_table, list) and len(surrender_table) > 0:
+                        # 转换为与原格式兼容的数据结构
+                        standard_data = {
+                            'standard': surrender_table
+                        }
+                        has_data = True
+                        product_name = product.product_name
                 except json.JSONDecodeError:
                     standard_data = None
 
@@ -77,12 +104,15 @@ def get_companies_standard_comparison(request):
                 'icon': company.icon,
                 'color_gradient': company.color_gradient,
                 'bg_color': company.bg_color,
+                'flagship_product': product_name,  # 使用产品名称
                 'has_data': has_data,
-                'standard_data': standard_data
+                'standard_data': standard_data,
+                'payment_period': payment_period  # 返回当前查询的缴费年限
             })
 
         return Response({
             'status': 'success',
+            'payment_period': payment_period,  # 告诉前端当前是哪个年期的数据
             'data': company_list
         })
 

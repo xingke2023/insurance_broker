@@ -1,0 +1,844 @@
+{
+  "standard": [
+    {
+      "policy_year": 1,
+      "premiums_paid": 10000,
+      "guaranteed": 0,
+      "non_guaranteed": 0,
+      "total": 0
+    },
+    {
+      "policy_year": 2,
+      "premiums_paid": 20000,
+      "guaranteed": 500,
+      "non_guaranteed": 4000,
+      "total": 4500
+    },
+    {
+      "policy_year": 3,
+      "premiums_paid": 30000,
+      "guaranteed": 2500,
+      "non_guaranteed": 8368,
+      "total": 10868
+    },
+    {
+      "policy_year": 4,
+      "premiums_paid": 40000,
+      "guaranteed": 5000,
+      "non_guaranteed": 13137,
+      "total": 18137
+    },
+    {
+      "policy_year": 5,
+      "premiums_paid": 50000,
+      "guaranteed": 12500,
+      "non_guaranteed": 18094,
+      "total": 30594
+    },
+    {
+      "policy_year": 6,
+      "premiums_paid": 50000,
+      "guaranteed": 24000,
+      "non_guaranteed": 26007,
+      "total": 50007
+    },
+    {
+      "policy_year": 7,
+      "premiums_paid": 50000,
+      "guaranteed": 26000,
+      "non_guaranteed": 29792,
+      "total": 55792
+    },
+    {
+      "policy_year": 8,
+      "premiums_paid": 50000,
+      "guaranteed": 27500,
+      "non_guaranteed": 34560,
+      "total": 62060
+    },
+    {
+      "policy_year": 9,
+      "premiums_paid": 50000,
+      "guaranteed": 28250,
+      "non_guaranteed": 38068,
+      "total": 66318
+    },
+    {
+      "policy_year": 10,
+      "premiums_paid": 50000,
+      "guaranteed": 30000,
+      "non_guaranteed": 40070,
+      "total": 70070
+    },
+    {
+      "policy_year": 11,
+      "premiums_paid": 50000,
+      "guaranteed": 32375,
+      "non_guaranteed": 47115,
+      "total": 79490
+    },
+    {
+      "policy_year": 12,
+      "premiums_paid": 50000,
+      "guaranteed": 34125,
+      "non_guaranteed": 51981,
+      "total": 86106
+    },
+    {
+      "policy_year": 13,
+      "premiums_paid": 50000,
+      "guaranteed": 36250,
+      "non_guaranteed": 57425,
+      "total": 93675
+    },
+    {
+      "policy_year": 14,
+      "premiums_paid": 50000,
+      "guaranteed": 38500,
+      "non_guaranteed": 60699,
+      "total": 99199
+    },
+    {
+      "policy_year": 15,
+      "premiums_paid": 50000,
+      "guaranteed": 40875,
+      "non_guaranteed": 64350,
+      "total": 105225
+    },
+    {
+      "policy_year": 16,
+      "premiums_paid": 50000,
+      "guaranteed": 43750,
+      "non_guaranteed": 67657,
+      "total": 111407
+    },
+    {
+      "policy_year": 17,
+      "premiums_paid": 50000,
+      "guaranteed": 47000,
+      "non_guaranteed": 71399,
+      "total": 118399
+    },
+    {
+      "policy_year": 18,
+      "premiums_paid": 50000,
+      "guaranteed": 50000,
+      "non_guaranteed": 76109,
+      "total": 126109
+    },
+    {
+      "policy_year": 19,
+      "premiums_paid": 50000,
+      "guaranteed": 53000,
+      "non_guaranteed": 81859,
+      "total": 134859
+    },
+    {
+      "policy_year": 20,
+      "premiums_paid": 50000,
+      "guaranteed": 54000,
+      "non_guaranteed": 89205,
+      "total": 143205
+    },
+    {
+      "policy_year": 21,
+      "premiums_paid": 50000,
+      "guaranteed": 54592,
+      "non_guaranteed": 97213,
+      "total": 151805
+    },
+    {
+      "policy_year": 22,
+      "premiums_paid": 50000,
+      "guaranteed": 54947,
+      "non_guaranteed": 105973,
+      "total": 160920
+    },
+    {
+      "policy_year": 23,
+      "premiums_paid": 50000,
+      "guaranteed": 55304,
+      "non_guaranteed": 115279,
+      "total": 170583
+    },
+    {
+      "policy_year": 24,
+      "premiums_paid": 50000,
+      "guaranteed": 55664,
+      "non_guaranteed": 125193,
+      "total": 180857
+    },
+    {
+      "policy_year": 25,
+      "premiums_paid": 50000,
+      "guaranteed": 56026,
+      "non_guaranteed": 135692,
+      "total": 191717
+    },
+    {
+      "policy_year": 26,
+      "premiums_paid": 50000,
+      "guaranteed": 56390,
+      "non_guaranteed": 146855,
+      "total": 203244
+    },
+    {
+      "policy_year": 27,
+      "premiums_paid": 50000,
+      "guaranteed": 56756,
+      "non_guaranteed": 158728,
+      "total": 215484
+    },
+    {
+      "policy_year": 28,
+      "premiums_paid": 50000,
+      "guaranteed": 57125,
+      "non_guaranteed": 171958,
+      "total": 229083
+    },
+    {
+      "policy_year": 29,
+      "premiums_paid": 50000,
+      "guaranteed": 57496,
+      "non_guaranteed": 186760,
+      "total": 244256
+    },
+    {
+      "policy_year": 30,
+      "premiums_paid": 50000,
+      "guaranteed": 57870,
+      "non_guaranteed": 202804,
+      "total": 260674
+    },
+    {
+      "policy_year": 31,
+      "premiums_paid": 50000,
+      "guaranteed": 58246,
+      "non_guaranteed": 220093,
+      "total": 278339
+    },
+    {
+      "policy_year": 32,
+      "premiums_paid": 50000,
+      "guaranteed": 58625,
+      "non_guaranteed": 238824,
+      "total": 297448
+    },
+    {
+      "policy_year": 33,
+      "premiums_paid": 50000,
+      "guaranteed": 59006,
+      "non_guaranteed": 259117,
+      "total": 318123
+    },
+    {
+      "policy_year": 34,
+      "premiums_paid": 50000,
+      "guaranteed": 59390,
+      "non_guaranteed": 280973,
+      "total": 340362
+    },
+    {
+      "policy_year": 35,
+      "premiums_paid": 50000,
+      "guaranteed": 59776,
+      "non_guaranteed": 304640,
+      "total": 364416
+    },
+    {
+      "policy_year": 36,
+      "premiums_paid": 50000,
+      "guaranteed": 60164,
+      "non_guaranteed": 330270,
+      "total": 390434
+    },
+    {
+      "policy_year": 37,
+      "premiums_paid": 50000,
+      "guaranteed": 60555,
+      "non_guaranteed": 358024,
+      "total": 418579
+    },
+    {
+      "policy_year": 38,
+      "premiums_paid": 50000,
+      "guaranteed": 60949,
+      "non_guaranteed": 388080,
+      "total": 449028
+    },
+    {
+      "policy_year": 39,
+      "premiums_paid": 50000,
+      "guaranteed": 61345,
+      "non_guaranteed": 420432,
+      "total": 481777
+    },
+    {
+      "policy_year": 40,
+      "premiums_paid": 50000,
+      "guaranteed": 61744,
+      "non_guaranteed": 455451,
+      "total": 517194
+    },
+    {
+      "policy_year": 41,
+      "premiums_paid": 50000,
+      "guaranteed": 62145,
+      "non_guaranteed": 493730,
+      "total": 555875
+    },
+    {
+      "policy_year": 42,
+      "premiums_paid": 50000,
+      "guaranteed": 62549,
+      "non_guaranteed": 535163,
+      "total": 597712
+    },
+    {
+      "policy_year": 43,
+      "premiums_paid": 50000,
+      "guaranteed": 62956,
+      "non_guaranteed": 580011,
+      "total": 642966
+    },
+    {
+      "policy_year": 44,
+      "premiums_paid": 50000,
+      "guaranteed": 63365,
+      "non_guaranteed": 628264,
+      "total": 691628
+    },
+    {
+      "policy_year": 45,
+      "premiums_paid": 50000,
+      "guaranteed": 63777,
+      "non_guaranteed": 680469,
+      "total": 744245
+    },
+    {
+      "policy_year": 46,
+      "premiums_paid": 50000,
+      "guaranteed": 64191,
+      "non_guaranteed": 736949,
+      "total": 801140
+    },
+    {
+      "policy_year": 47,
+      "premiums_paid": 50000,
+      "guaranteed": 64608,
+      "non_guaranteed": 789323,
+      "total": 853931
+    },
+    {
+      "policy_year": 48,
+      "premiums_paid": 50000,
+      "guaranteed": 65028,
+      "non_guaranteed": 844409,
+      "total": 909437
+    },
+    {
+      "policy_year": 49,
+      "premiums_paid": 50000,
+      "guaranteed": 65451,
+      "non_guaranteed": 903099,
+      "total": 968550
+    },
+    {
+      "policy_year": 50,
+      "premiums_paid": 50000,
+      "guaranteed": 65877,
+      "non_guaranteed": 965630,
+      "total": 1031506
+    },
+    {
+      "policy_year": 51,
+      "premiums_paid": 50000,
+      "guaranteed": 66338,
+      "non_guaranteed": 1032217,
+      "total": 1098554
+    },
+    {
+      "policy_year": 52,
+      "premiums_paid": 50000,
+      "guaranteed": 66802,
+      "non_guaranteed": 1103159,
+      "total": 1169960
+    },
+    {
+      "policy_year": 53,
+      "premiums_paid": 50000,
+      "guaranteed": 67270,
+      "non_guaranteed": 1178739,
+      "total": 1246008
+    },
+    {
+      "policy_year": 54,
+      "premiums_paid": 50000,
+      "guaranteed": 67740,
+      "non_guaranteed": 1259258,
+      "total": 1326998
+    },
+    {
+      "policy_year": 55,
+      "premiums_paid": 50000,
+      "guaranteed": 68215,
+      "non_guaranteed": 1345039,
+      "total": 1413253
+    },
+    {
+      "policy_year": 56,
+      "premiums_paid": 50000,
+      "guaranteed": 68692,
+      "non_guaranteed": 1436422,
+      "total": 1505114
+    },
+    {
+      "policy_year": 57,
+      "premiums_paid": 50000,
+      "guaranteed": 69173,
+      "non_guaranteed": 1533774,
+      "total": 1602947
+    },
+    {
+      "policy_year": 58,
+      "premiums_paid": 50000,
+      "guaranteed": 69657,
+      "non_guaranteed": 1637482,
+      "total": 1707139
+    },
+    {
+      "policy_year": 59,
+      "premiums_paid": 50000,
+      "guaranteed": 70145,
+      "non_guaranteed": 1747959,
+      "total": 1818103
+    },
+    {
+      "policy_year": 60,
+      "premiums_paid": 50000,
+      "guaranteed": 70636,
+      "non_guaranteed": 1865644,
+      "total": 1936279
+    },
+    {
+      "policy_year": 61,
+      "premiums_paid": 50000,
+      "guaranteed": 71130,
+      "non_guaranteed": 1991007,
+      "total": 2062137
+    },
+    {
+      "policy_year": 62,
+      "premiums_paid": 50000,
+      "guaranteed": 71628,
+      "non_guaranteed": 2124548,
+      "total": 2196176
+    },
+    {
+      "policy_year": 63,
+      "premiums_paid": 50000,
+      "guaranteed": 72130,
+      "non_guaranteed": 2266799,
+      "total": 2338928
+    },
+    {
+      "policy_year": 64,
+      "premiums_paid": 50000,
+      "guaranteed": 72635,
+      "non_guaranteed": 2418324,
+      "total": 2490958
+    },
+    {
+      "policy_year": 65,
+      "premiums_paid": 50000,
+      "guaranteed": 73143,
+      "non_guaranteed": 2579729,
+      "total": 2652871
+    },
+    {
+      "policy_year": 66,
+      "premiums_paid": 50000,
+      "guaranteed": 73655,
+      "non_guaranteed": 2751653,
+      "total": 2825307
+    },
+    {
+      "policy_year": 67,
+      "premiums_paid": 50000,
+      "guaranteed": 74171,
+      "non_guaranteed": 2934782,
+      "total": 3008952
+    },
+    {
+      "policy_year": 68,
+      "premiums_paid": 50000,
+      "guaranteed": 74690,
+      "non_guaranteed": 3129845,
+      "total": 3204534
+    },
+    {
+      "policy_year": 69,
+      "premiums_paid": 50000,
+      "guaranteed": 75213,
+      "non_guaranteed": 3337617,
+      "total": 3412829
+    },
+    {
+      "policy_year": 70,
+      "premiums_paid": 50000,
+      "guaranteed": 75739,
+      "non_guaranteed": 3558924,
+      "total": 3634663
+    },
+    {
+      "policy_year": 71,
+      "premiums_paid": 50000,
+      "guaranteed": 76269,
+      "non_guaranteed": 3794647,
+      "total": 3870916
+    },
+    {
+      "policy_year": 72,
+      "premiums_paid": 50000,
+      "guaranteed": 76803,
+      "non_guaranteed": 4045723,
+      "total": 4122526
+    },
+    {
+      "policy_year": 73,
+      "premiums_paid": 50000,
+      "guaranteed": 77341,
+      "non_guaranteed": 4313150,
+      "total": 4390490
+    },
+    {
+      "policy_year": 74,
+      "premiums_paid": 50000,
+      "guaranteed": 77882,
+      "non_guaranteed": 4597990,
+      "total": 4675872
+    },
+    {
+      "policy_year": 75,
+      "premiums_paid": 50000,
+      "guaranteed": 78427,
+      "non_guaranteed": 4901376,
+      "total": 4979803
+    },
+    {
+      "policy_year": 76,
+      "premiums_paid": 50000,
+      "guaranteed": 78976,
+      "non_guaranteed": 5224515,
+      "total": 5303491
+    },
+    {
+      "policy_year": 77,
+      "premiums_paid": 50000,
+      "guaranteed": 79529,
+      "non_guaranteed": 5568688,
+      "total": 5648217
+    },
+    {
+      "policy_year": 78,
+      "premiums_paid": 50000,
+      "guaranteed": 80086,
+      "non_guaranteed": 5935267,
+      "total": 6015352
+    },
+    {
+      "policy_year": 79,
+      "premiums_paid": 50000,
+      "guaranteed": 80646,
+      "non_guaranteed": 6325703,
+      "total": 6406349
+    },
+    {
+      "policy_year": 80,
+      "premiums_paid": 50000,
+      "guaranteed": 81211,
+      "non_guaranteed": 6741552,
+      "total": 6822762
+    },
+    {
+      "policy_year": 81,
+      "premiums_paid": 50000,
+      "guaranteed": 81779,
+      "non_guaranteed": 7184463,
+      "total": 7266242
+    },
+    {
+      "policy_year": 82,
+      "premiums_paid": 50000,
+      "guaranteed": 82352,
+      "non_guaranteed": 7656197,
+      "total": 7738548
+    },
+    {
+      "policy_year": 83,
+      "premiums_paid": 50000,
+      "guaranteed": 82928,
+      "non_guaranteed": 8158625,
+      "total": 8241553
+    },
+    {
+      "policy_year": 84,
+      "premiums_paid": 50000,
+      "guaranteed": 83509,
+      "non_guaranteed": 8693746,
+      "total": 8777254
+    },
+    {
+      "policy_year": 85,
+      "premiums_paid": 50000,
+      "guaranteed": 84093,
+      "non_guaranteed": 9263683,
+      "total": 9347776
+    },
+    {
+      "policy_year": 86,
+      "premiums_paid": 50000,
+      "guaranteed": 84682,
+      "non_guaranteed": 9870700,
+      "total": 9955381
+    },
+    {
+      "policy_year": 87,
+      "premiums_paid": 50000,
+      "guaranteed": 85275,
+      "non_guaranteed": 10517207,
+      "total": 10602481
+    },
+    {
+      "policy_year": 88,
+      "premiums_paid": 50000,
+      "guaranteed": 85872,
+      "non_guaranteed": 11205771,
+      "total": 11291642
+    },
+    {
+      "policy_year": 89,
+      "premiums_paid": 50000,
+      "guaranteed": 86473,
+      "non_guaranteed": 11939127,
+      "total": 12025599
+    },
+    {
+      "policy_year": 90,
+      "premiums_paid": 50000,
+      "guaranteed": 87078,
+      "non_guaranteed": 12720185,
+      "total": 12807263
+    },
+    {
+      "policy_year": 91,
+      "premiums_paid": 50000,
+      "guaranteed": 87688,
+      "non_guaranteed": 13552048,
+      "total": 13639735
+    },
+    {
+      "policy_year": 92,
+      "premiums_paid": 50000,
+      "guaranteed": 88301,
+      "non_guaranteed": 14438017,
+      "total": 14526318
+    },
+    {
+      "policy_year": 93,
+      "premiums_paid": 50000,
+      "guaranteed": 88920,
+      "non_guaranteed": 15381610,
+      "total": 15470529
+    },
+    {
+      "policy_year": 94,
+      "premiums_paid": 50000,
+      "guaranteed": 89542,
+      "non_guaranteed": 16386572,
+      "total": 16476113
+    },
+    {
+      "policy_year": 95,
+      "premiums_paid": 50000,
+      "guaranteed": 90169,
+      "non_guaranteed": 17456892,
+      "total": 17547060
+    },
+    {
+      "policy_year": 96,
+      "premiums_paid": 50000,
+      "guaranteed": 90800,
+      "non_guaranteed": 18596820,
+      "total": 18687619
+    },
+    {
+      "policy_year": 97,
+      "premiums_paid": 50000,
+      "guaranteed": 91436,
+      "non_guaranteed": 19810880,
+      "total": 19902315
+    },
+    {
+      "policy_year": 98,
+      "premiums_paid": 50000,
+      "guaranteed": 92076,
+      "non_guaranteed": 21103890,
+      "total": 21195965
+    },
+    {
+      "policy_year": 99,
+      "premiums_paid": 50000,
+      "guaranteed": 92720,
+      "non_guaranteed": 22480983,
+      "total": 22573703
+    },
+    {
+      "policy_year": 100,
+      "premiums_paid": 50000,
+      "guaranteed": 93369,
+      "non_guaranteed": 23947625,
+      "total": 24040994
+    },
+    {
+      "policy_year": 101,
+      "premiums_paid": 50000,
+      "guaranteed": 94023,
+      "non_guaranteed": 25509636,
+      "total": 25603658
+    },
+    {
+      "policy_year": 102,
+      "premiums_paid": 50000,
+      "guaranteed": 94681,
+      "non_guaranteed": 27173216,
+      "total": 27267896
+    },
+    {
+      "policy_year": 103,
+      "premiums_paid": 50000,
+      "guaranteed": 95344,
+      "non_guaranteed": 28944966,
+      "total": 29040309
+    },
+    {
+      "policy_year": 104,
+      "premiums_paid": 50000,
+      "guaranteed": 96011,
+      "non_guaranteed": 30831919,
+      "total": 30927930
+    },
+    {
+      "policy_year": 105,
+      "premiums_paid": 50000,
+      "guaranteed": 96683,
+      "non_guaranteed": 32841562,
+      "total": 32938245
+    },
+    {
+      "policy_year": 106,
+      "premiums_paid": 50000,
+      "guaranteed": 97360,
+      "non_guaranteed": 34981871,
+      "total": 35079231
+    },
+    {
+      "policy_year": 107,
+      "premiums_paid": 50000,
+      "guaranteed": 98042,
+      "non_guaranteed": 37261340,
+      "total": 37359381
+    },
+    {
+      "policy_year": 108,
+      "premiums_paid": 50000,
+      "guaranteed": 98728,
+      "non_guaranteed": 39689013,
+      "total": 39787741
+    },
+    {
+      "policy_year": 109,
+      "premiums_paid": 50000,
+      "guaranteed": 99419,
+      "non_guaranteed": 42274525,
+      "total": 42373944
+    },
+    {
+      "policy_year": 110,
+      "premiums_paid": 50000,
+      "guaranteed": 100115,
+      "non_guaranteed": 45028136,
+      "total": 45128251
+    },
+    {
+      "policy_year": 111,
+      "premiums_paid": 50000,
+      "guaranteed": 100816,
+      "non_guaranteed": 47960771,
+      "total": 48061587
+    },
+    {
+      "policy_year": 112,
+      "premiums_paid": 50000,
+      "guaranteed": 101522,
+      "non_guaranteed": 51084069,
+      "total": 51185590
+    },
+    {
+      "policy_year": 113,
+      "premiums_paid": 50000,
+      "guaranteed": 102232,
+      "non_guaranteed": 54410421,
+      "total": 54512653
+    },
+    {
+      "policy_year": 114,
+      "premiums_paid": 50000,
+      "guaranteed": 102948,
+      "non_guaranteed": 57953029,
+      "total": 58055976
+    },
+    {
+      "policy_year": 115,
+      "premiums_paid": 50000,
+      "guaranteed": 103668,
+      "non_guaranteed": 61725946,
+      "total": 61829614
+    },
+    {
+      "policy_year": 116,
+      "premiums_paid": 50000,
+      "guaranteed": 104394,
+      "non_guaranteed": 65744146,
+      "total": 65848539
+    },
+    {
+      "policy_year": 117,
+      "premiums_paid": 50000,
+      "guaranteed": 105125,
+      "non_guaranteed": 70023570,
+      "total": 70128694
+    },
+    {
+      "policy_year": 118,
+      "premiums_paid": 50000,
+      "guaranteed": 105861,
+      "non_guaranteed": 74581200,
+      "total": 74687060
+    },
+    {
+      "policy_year": 119,
+      "premiums_paid": 50000,
+      "guaranteed": 106602,
+      "non_guaranteed": 79435118,
+      "total": 79541719
+    },
+    {
+      "policy_year": 120,
+      "premiums_paid": 50000,
+      "guaranteed": 107348,
+      "non_guaranteed": 84604583,
+      "total": 84711930
+    }
+  ]
+}

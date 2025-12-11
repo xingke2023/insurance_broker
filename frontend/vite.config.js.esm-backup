@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import react from '@vitejs/plugin-react-swc'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  esbuild: false,  // 关闭 esbuild 服务复用，避免 EPIPE 错误
   server: {
     host: '0.0.0.0',
     port: 8008,
@@ -16,11 +17,14 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
-    minify: 'esbuild',
+    minify: false,
     rollupOptions: {
       output: {
         manualChunks: undefined
       }
     }
+  },
+  optimizeDeps: {
+    disabled: true,
   }
 })

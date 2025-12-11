@@ -7,7 +7,7 @@ const getApiUrl = () => {
   // 如果是localhost，使用localhost直连
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     console.log('使用localhost API');
-    return 'http://localhost:8007';
+    return 'http://localhost:8017';
   }
 
   // 生产环境使用相对路径（通过Nginx反向代理）

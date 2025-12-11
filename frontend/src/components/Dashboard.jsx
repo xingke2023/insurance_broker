@@ -102,7 +102,7 @@ function Dashboard() {
     }
   }, []);
 
-  // 检测小程序环境下的登录状态
+  // 检测登录状态（作为ProtectedRoute的额外保障）
   useEffect(() => {
     console.log('🔍 [Dashboard] useEffect 触发 - 检测登录状态');
     console.log('  - loading:', loading);
@@ -129,19 +129,26 @@ function Dashboard() {
       return;
     }
 
-    const inMiniProgram = isInMiniProgram();
-    console.log('  - 是否在小程序中:', inMiniProgram);
+    // 如果用户未登录（这应该被ProtectedRoute拦截，但作为额外保障）
+    if (!user) {
+      console.log('⚠️ [Dashboard] 检测到未登录状态（ProtectedRoute可能未生效）');
+      const inMiniProgram = isInMiniProgram();
+      console.log('  - 是否在小程序中:', inMiniProgram);
 
-    // 如果在小程序环境中,但是没有登录状态
-    if (inMiniProgram && !user) {
-      console.log('⚠️ [Dashboard] 小程序环境中未登录,准备跳转到登录页');
-      // 等待 JS-SDK 加载完成后再跳转
-      const timer = setTimeout(() => {
-        console.log('🔄 [Dashboard] 执行跳转到小程序登录页');
-        redirectToMiniProgramLogin();
-      }, 500);
+      if (inMiniProgram) {
+        console.log('⚠️ [Dashboard] 小程序环境中未登录,准备跳转到登录页');
+        // 等待 JS-SDK 加载完成后再跳转
+        const timer = setTimeout(() => {
+          console.log('🔄 [Dashboard] 执行跳转到小程序登录页');
+          redirectToMiniProgramLogin();
+        }, 500);
 
-      return () => clearTimeout(timer);
+        return () => clearTimeout(timer);
+      } else {
+        console.log('⚠️ [Dashboard] 普通浏览器中未登录，强制跳转到首页');
+        // 直接跳转到首页
+        window.location.href = '/';
+      }
     } else {
       console.log('✅ [Dashboard] 登录状态正常，继续显示页面');
     }
@@ -220,8 +227,8 @@ function Dashboard() {
   const quickActions = [
     { name: '计划书管理', icon: FolderIcon, action: () => onNavigate('plan-management'), color: 'from-primary-600 to-blue-600', show: true },
     { name: '计划书分步骤分析', icon: DocumentTextIcon, action: () => onNavigate('plan-analyzer-2'), color: 'from-emerald-600 to-teal-600', show: true },
-    { name: '计划书制作', icon: DocumentTextIcon, action: () => onNavigate('plan-builder'), color: 'from-purple-600 to-indigo-600', show: true },
-    { name: '保险公司标准对比', icon: ChartBarIcon, action: () => onNavigate('company-comparison'), color: 'from-cyan-600 to-blue-600', show: true },
+    { name: '计划书制作', icon: DocumentTextIcon, action: () => onNavigate('plan-builder'), color: 'from-purple-600 to-indigo-600', show: true, disabled: true },
+    { name: '各公司保险产品对比', icon: ChartBarIcon, action: () => onNavigate('company-comparison'), color: 'from-cyan-600 to-blue-600', show: true },
     { name: '打造个人IP形象', icon: SparklesIcon, action: () => onNavigate('ip-image-generator'), color: 'from-pink-600 to-purple-600', show: true },
     { name: '个人IP动画配图制作', icon: DocumentTextIcon, action: () => onNavigate('content-image-generator'), color: 'from-indigo-600 to-blue-600', show: true },
     { name: '轮播图视频制作', icon: SparklesIcon, action: () => onNavigate('video-projects'), color: 'from-orange-600 to-red-600', show: true },
@@ -528,21 +535,28 @@ function Dashboard() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    action.action();
+                    if (!action.disabled) {
+                      action.action();
+                    }
                   }}
-                  className="bg-white border border-blue-100 rounded-lg p-6 hover:border-blue-400 hover:shadow-md transition-all flex items-center gap-4 text-left group relative overflow-hidden min-h-[120px]"
+                  disabled={action.disabled}
+                  className={`bg-white border border-blue-100 rounded-lg p-6 transition-all flex items-center gap-4 text-left group relative overflow-hidden min-h-[120px] ${
+                    action.disabled
+                      ? 'opacity-50 cursor-not-allowed'
+                      : 'hover:border-blue-400 hover:shadow-md cursor-pointer'
+                  }`}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all relative z-10">
+                  <div className={`absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent transition-opacity ${action.disabled ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'}`}></div>
+                  <div className={`w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm transition-all relative z-10 ${action.disabled ? '' : 'group-hover:shadow-md group-hover:scale-105'}`}>
                     <action.icon className="w-7 h-7 text-white" />
                   </div>
                   <div className="flex-1 relative z-10">
-                    <h4 className="text-base font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    <h4 className={`text-base font-bold transition-colors ${action.disabled ? 'text-gray-900' : 'text-gray-900 group-hover:text-blue-600'}`}>
                       {action.name}
                     </h4>
-                    <p className="text-sm text-gray-500 mt-1 font-medium">点击访问</p>
+                    <p className="text-sm text-gray-500 mt-1 font-medium">{action.disabled ? '暂不可用' : '点击访问'}</p>
                   </div>
-                  <div className="text-gray-400 group-hover:text-blue-500 transition-colors relative z-10">
+                  <div className={`transition-colors relative z-10 ${action.disabled ? 'text-gray-400' : 'text-gray-400 group-hover:text-blue-500'}`}>
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>

@@ -1,0 +1,1204 @@
+{
+  "withdrawal": [
+    {
+      "policy_year": 1,
+      "premiums_paid": 10000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 0,
+      "notional_amount": 50000,
+      "guaranteed": 0,
+      "non_guaranteed": 0,
+      "total_surrender": 0
+    },
+    {
+      "policy_year": 2,
+      "premiums_paid": 20000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 0,
+      "notional_amount": 50000,
+      "guaranteed": 500,
+      "non_guaranteed": 4000,
+      "total_surrender": 4500
+    },
+    {
+      "policy_year": 3,
+      "premiums_paid": 30000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 0,
+      "notional_amount": 50000,
+      "guaranteed": 2500,
+      "non_guaranteed": 8368,
+      "total_surrender": 10868
+    },
+    {
+      "policy_year": 4,
+      "premiums_paid": 40000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 0,
+      "notional_amount": 50000,
+      "guaranteed": 5000,
+      "non_guaranteed": 13137,
+      "total_surrender": 18137
+    },
+    {
+      "policy_year": 5,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 18980,
+      "accumulated_withdrawal": 18980,
+      "notional_amount": 18980,
+      "guaranteed": 4745,
+      "non_guaranteed": 6869,
+      "total_surrender": 11614
+    },
+    {
+      "policy_year": 6,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 18980,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 1,
+      "non_guaranteed": 2,
+      "total_surrender": 3
+    },
+    {
+      "policy_year": 7,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 2,
+      "total_surrender": 3
+    },
+    {
+      "policy_year": 8,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 2,
+      "total_surrender": 4
+    },
+    {
+      "policy_year": 9,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 2,
+      "total_surrender": 4
+    },
+    {
+      "policy_year": 10,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 3,
+      "total_surrender": 4
+    },
+    {
+      "policy_year": 11,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 3,
+      "total_surrender": 5
+    },
+    {
+      "policy_year": 12,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 3,
+      "total_surrender": 5
+    },
+    {
+      "policy_year": 13,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 4,
+      "total_surrender": 6
+    },
+    {
+      "policy_year": 14,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 4,
+      "total_surrender": 6
+    },
+    {
+      "policy_year": 15,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 2,
+      "non_guaranteed": 4,
+      "total_surrender": 6
+    },
+    {
+      "policy_year": 16,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 4,
+      "total_surrender": 7
+    },
+    {
+      "policy_year": 17,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 4,
+      "total_surrender": 7
+    },
+    {
+      "policy_year": 18,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 5,
+      "total_surrender": 8
+    },
+    {
+      "policy_year": 19,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 5,
+      "total_surrender": 8
+    },
+    {
+      "policy_year": 20,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 6,
+      "total_surrender": 9
+    },
+    {
+      "policy_year": 21,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 6,
+      "total_surrender": 9
+    },
+    {
+      "policy_year": 22,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 7,
+      "total_surrender": 10
+    },
+    {
+      "policy_year": 23,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 7,
+      "total_surrender": 11
+    },
+    {
+      "policy_year": 24,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 8,
+      "total_surrender": 11
+    },
+    {
+      "policy_year": 25,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 8,
+      "total_surrender": 12
+    },
+    {
+      "policy_year": 26,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 9,
+      "total_surrender": 13
+    },
+    {
+      "policy_year": 27,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 10,
+      "total_surrender": 13
+    },
+    {
+      "policy_year": 28,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 11,
+      "total_surrender": 14
+    },
+    {
+      "policy_year": 29,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 12,
+      "total_surrender": 15
+    },
+    {
+      "policy_year": 30,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 13,
+      "total_surrender": 16
+    },
+    {
+      "policy_year": 31,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 3,
+      "non_guaranteed": 14,
+      "total_surrender": 17
+    },
+    {
+      "policy_year": 32,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 15,
+      "total_surrender": 18
+    },
+    {
+      "policy_year": 33,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 16,
+      "total_surrender": 20
+    },
+    {
+      "policy_year": 34,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 17,
+      "total_surrender": 21
+    },
+    {
+      "policy_year": 35,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 19,
+      "total_surrender": 23
+    },
+    {
+      "policy_year": 36,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 21,
+      "total_surrender": 24
+    },
+    {
+      "policy_year": 37,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 22,
+      "total_surrender": 26
+    },
+    {
+      "policy_year": 38,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 24,
+      "total_surrender": 28
+    },
+    {
+      "policy_year": 39,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 26,
+      "total_surrender": 30
+    },
+    {
+      "policy_year": 40,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 28,
+      "total_surrender": 32
+    },
+    {
+      "policy_year": 41,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 31,
+      "total_surrender": 34
+    },
+    {
+      "policy_year": 42,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 33,
+      "total_surrender": 37
+    },
+    {
+      "policy_year": 43,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 36,
+      "total_surrender": 40
+    },
+    {
+      "policy_year": 44,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 39,
+      "total_surrender": 43
+    },
+    {
+      "policy_year": 45,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 42,
+      "total_surrender": 46
+    },
+    {
+      "policy_year": 46,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 46,
+      "total_surrender": 50
+    },
+    {
+      "policy_year": 47,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 50,
+      "total_surrender": 54
+    },
+    {
+      "policy_year": 48,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 54,
+      "total_surrender": 58
+    },
+    {
+      "policy_year": 49,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 58,
+      "total_surrender": 62
+    },
+    {
+      "policy_year": 50,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 63,
+      "total_surrender": 67
+    },
+    {
+      "policy_year": 51,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 68,
+      "total_surrender": 72
+    },
+    {
+      "policy_year": 52,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 74,
+      "total_surrender": 78
+    },
+    {
+      "policy_year": 53,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 80,
+      "total_surrender": 84
+    },
+    {
+      "policy_year": 54,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 87,
+      "total_surrender": 91
+    },
+    {
+      "policy_year": 55,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 94,
+      "total_surrender": 98
+    },
+    {
+      "policy_year": 56,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 102,
+      "total_surrender": 106
+    },
+    {
+      "policy_year": 57,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 110,
+      "total_surrender": 114
+    },
+    {
+      "policy_year": 58,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 119,
+      "total_surrender": 123
+    },
+    {
+      "policy_year": 59,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 129,
+      "total_surrender": 133
+    },
+    {
+      "policy_year": 60,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 139,
+      "total_surrender": 144
+    },
+    {
+      "policy_year": 61,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 151,
+      "total_surrender": 155
+    },
+    {
+      "policy_year": 62,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 163,
+      "total_surrender": 167
+    },
+    {
+      "policy_year": 63,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 176,
+      "total_surrender": 180
+    },
+    {
+      "policy_year": 64,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 190,
+      "total_surrender": 195
+    },
+    {
+      "policy_year": 65,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 206,
+      "total_surrender": 210
+    },
+    {
+      "policy_year": 66,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 223,
+      "total_surrender": 227
+    },
+    {
+      "policy_year": 67,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 241,
+      "total_surrender": 245
+    },
+    {
+      "policy_year": 68,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 4,
+      "non_guaranteed": 260,
+      "total_surrender": 265
+    },
+    {
+      "policy_year": 69,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 281,
+      "total_surrender": 286
+    },
+    {
+      "policy_year": 70,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 304,
+      "total_surrender": 308
+    },
+    {
+      "policy_year": 71,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 329,
+      "total_surrender": 333
+    },
+    {
+      "policy_year": 72,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 355,
+      "total_surrender": 360
+    },
+    {
+      "policy_year": 73,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 384,
+      "total_surrender": 388
+    },
+    {
+      "policy_year": 74,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 415,
+      "total_surrender": 419
+    },
+    {
+      "policy_year": 75,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 448,
+      "total_surrender": 453
+    },
+    {
+      "policy_year": 76,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 484,
+      "total_surrender": 489
+    },
+    {
+      "policy_year": 77,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 524,
+      "total_surrender": 528
+    },
+    {
+      "policy_year": 78,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 566,
+      "total_surrender": 571
+    },
+    {
+      "policy_year": 79,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 611,
+      "total_surrender": 616
+    },
+    {
+      "policy_year": 80,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 661,
+      "total_surrender": 666
+    },
+    {
+      "policy_year": 81,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 711,
+      "total_surrender": 715
+    },
+    {
+      "policy_year": 82,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 764,
+      "total_surrender": 769
+    },
+    {
+      "policy_year": 83,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 822,
+      "total_surrender": 827
+    },
+    {
+      "policy_year": 84,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 884,
+      "total_surrender": 889
+    },
+    {
+      "policy_year": 85,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 950,
+      "total_surrender": 955
+    },
+    {
+      "policy_year": 86,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1022,
+      "total_surrender": 1027
+    },
+    {
+      "policy_year": 87,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1099,
+      "total_surrender": 1104
+    },
+    {
+      "policy_year": 88,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1182,
+      "total_surrender": 1187
+    },
+    {
+      "policy_year": 89,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1271,
+      "total_surrender": 1276
+    },
+    {
+      "policy_year": 90,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1366,
+      "total_surrender": 1371
+    },
+    {
+      "policy_year": 91,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1469,
+      "total_surrender": 1474
+    },
+    {
+      "policy_year": 92,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1580,
+      "total_surrender": 1585
+    },
+    {
+      "policy_year": 93,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1699,
+      "total_surrender": 1704
+    },
+    {
+      "policy_year": 94,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1827,
+      "total_surrender": 1832
+    },
+    {
+      "policy_year": 95,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 1964,
+      "total_surrender": 1969
+    },
+    {
+      "policy_year": 96,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 2112,
+      "total_surrender": 2117
+    },
+    {
+      "policy_year": 97,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 5,
+      "non_guaranteed": 2271,
+      "total_surrender": 2276
+    },
+    {
+      "policy_year": 98,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 2442,
+      "total_surrender": 2447
+    },
+    {
+      "policy_year": 99,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 2625,
+      "total_surrender": 2631
+    },
+    {
+      "policy_year": 100,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 2823,
+      "total_surrender": 2829
+    },
+    {
+      "policy_year": 101,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 3036,
+      "total_surrender": 3041
+    },
+    {
+      "policy_year": 102,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 3264,
+      "total_surrender": 3270
+    },
+    {
+      "policy_year": 103,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 3510,
+      "total_surrender": 3515
+    },
+    {
+      "policy_year": 104,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 3774,
+      "total_surrender": 3779
+    },
+    {
+      "policy_year": 105,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 4057,
+      "total_surrender": 4063
+    },
+    {
+      "policy_year": 106,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 4363,
+      "total_surrender": 4369
+    },
+    {
+      "policy_year": 107,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 4691,
+      "total_surrender": 4697
+    },
+    {
+      "policy_year": 108,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 5044,
+      "total_surrender": 5050
+    },
+    {
+      "policy_year": 109,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 5423,
+      "total_surrender": 5429
+    },
+    {
+      "policy_year": 110,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 5831,
+      "total_surrender": 5837
+    },
+    {
+      "policy_year": 111,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 6270,
+      "total_surrender": 6276
+    },
+    {
+      "policy_year": 112,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 6742,
+      "total_surrender": 6748
+    },
+    {
+      "policy_year": 113,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 7249,
+      "total_surrender": 7255
+    },
+    {
+      "policy_year": 114,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 7794,
+      "total_surrender": 7800
+    },
+    {
+      "policy_year": 115,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 8380,
+      "total_surrender": 8386
+    },
+    {
+      "policy_year": 116,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 9010,
+      "total_surrender": 9017
+    },
+    {
+      "policy_year": 117,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 9688,
+      "total_surrender": 9694
+    },
+    {
+      "policy_year": 118,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 10417,
+      "total_surrender": 10423
+    },
+    {
+      "policy_year": 119,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 11200,
+      "total_surrender": 11207
+    },
+    {
+      "policy_year": 120,
+      "premiums_paid": 50000,
+      "withdrawal_amount": 0,
+      "accumulated_withdrawal": 37960,
+      "notional_amount": 3,
+      "guaranteed": 6,
+      "non_guaranteed": 12043,
+      "total_surrender": 12049
+    }
+  ]
+}

@@ -715,6 +715,13 @@ class InsuranceCompany(models.Model):
         default='',
         help_text='存储标准退保数据（第1-100年），JSON格式：{"standard": [{"policy_year": 1, "guaranteed": 0, "non_guaranteed": 0, "total": 0, "premiums_paid": 10000}, ...]}'
     )
+    flagship_product = models.CharField(
+        max_length=200,
+        verbose_name='主打寿险产品',
+        blank=True,
+        default='',
+        help_text='该保险公司的主打寿险产品名称'
+    )
     is_active = models.BooleanField(
         default=True,
         verbose_name='是否启用'
@@ -740,6 +747,79 @@ class InsuranceCompany(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.code})"
+
+
+class InsuranceProduct(models.Model):
+    """保险公司产品模型"""
+    company = models.ForeignKey(
+        InsuranceCompany,
+        on_delete=models.CASCADE,
+        related_name='products',
+        verbose_name='所属保险公司'
+    )
+    product_name = models.CharField(
+        max_length=200,
+        verbose_name='产品名称'
+    )
+    payment_period = models.IntegerField(
+        verbose_name='缴费年期',
+        help_text='缴费年数，例如：5年、10年'
+    )
+    annual_premium = models.DecimalField(
+        max_digits=15,
+        decimal_places=2,
+        verbose_name='年缴金额',
+        help_text='年缴保费金额'
+    )
+    surrender_value_table = models.TextField(
+        verbose_name='退保发还金额表',
+        blank=True,
+        default='',
+        help_text='JSON格式存储各年度退保价值，例如：[{"year": 1, "guaranteed": 0, "non_guaranteed": 0, "total": 0}, ...]'
+    )
+    death_benefit_table = models.TextField(
+        verbose_name='身故保险赔偿表',
+        blank=True,
+        default='',
+        help_text='JSON格式存储各年度身故赔偿金额，例如：[{"year": 1, "benefit": 100000}, ...]'
+    )
+    is_withdrawal = models.BooleanField(
+        default=False,
+        verbose_name='是否提取',
+        help_text='是否包含提取功能'
+    )
+    description = models.TextField(
+        verbose_name='产品描述',
+        blank=True
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='是否启用'
+    )
+    sort_order = models.IntegerField(
+        default=0,
+        verbose_name='排序'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='创建时间'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='更新时间'
+    )
+
+    class Meta:
+        db_table = 'insurance_products'
+        verbose_name = '保险公司产品'
+        verbose_name_plural = '保险公司产品'
+        ordering = ['company', 'sort_order', 'product_name']
+        indexes = [
+            models.Index(fields=['company', 'is_active']),
+        ]
+
+    def __str__(self):
+        return f"{self.company.name} - {self.product_name}"
 
 
 class InsuranceCompanyRequest(models.Model):

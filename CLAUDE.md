@@ -511,3 +511,4 @@ redis-cli LLEN celery
     - total: 行使无忧选后的退保价值
 - 第一步OCR识别 如果失败 其他步骤就全部没有意义了
 - 第一步OCR识别 如果失败 其他步骤就全部没有意义了
+- /memory 页面company-comparison 文件frontend/src/components/CompanyComparison.jsx
