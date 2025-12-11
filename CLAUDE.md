@@ -512,3 +512,13 @@ redis-cli LLEN celery
 - 第一步OCR识别 如果失败 其他步骤就全部没有意义了
 - 第一步OCR识别 如果失败 其他步骤就全部没有意义了
 - /memory 页面company-comparison 文件frontend/src/components/CompanyComparison.jsx
+- /memory 您的系统（可能是 AppArmor 或其他安全模块）正在杀死 esbuild 的原生二进制文件（每次运行都被 SIGKILL 信号杀死，Exit code
+  137）。
+
+  解决方案
+
+  我使用了 esbuild-wasm（WebAssembly 版本的 esbuild）替代原生二进制版本：
+
+  1. ✅ 安装了 esbuild-wasm
+  2. ✅ 通过符号链接将 node_modules/esbuild 指向 esbuild-wasm
+  3. ✅ 构建成功完成（11.94秒

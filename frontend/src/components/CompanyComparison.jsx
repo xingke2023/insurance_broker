@@ -44,6 +44,12 @@ function CompanyComparison() {
   const [showCalculator, setShowCalculator] = useState(false);
   const [calculatorField, setCalculatorField] = useState(null); // 'age' or 'premium'
 
+  // 产品选择相关状态
+  const [showProductSelector, setShowProductSelector] = useState(false);
+  const [currentCompanyForSelection, setCurrentCompanyForSelection] = useState(null);
+  const [selectedProductsByCompany, setSelectedProductsByCompany] = useState({}); // {companyId: [productId1, productId2]}
+  const [tempSelectedProducts, setTempSelectedProducts] = useState([]); // 临时选择的产品ID列表
+
   // 年份选择器相关状态
   const [showYearSelector, setShowYearSelector] = useState(false);
   const [selectedYears, setSelectedYears] = useState(() => {
@@ -51,6 +57,7 @@ function CompanyComparison() {
     return customAgesInput.split(',').map(y => parseInt(y.trim())).filter(y => !isNaN(y));
   });
   const availableYears = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 60, 80, 100];
+  const [yearRangeInput, setYearRangeInput] = useState(''); // 范围输入框的值
 
   // 自定义显示列相关状态
   const [showColumnSelector, setShowColumnSelector] = useState(false);
@@ -247,6 +254,7 @@ function CompanyComparison() {
   const handlePaymentYearsChange = (years) => {
     setPaymentYears(years);
     setSelectedIds([]); // 清空已选择的公司
+    setSelectedProductsByCompany({}); // 清空已选择的产品
     fetchCompanies(years); // 重新获取数据
   };
 
@@ -254,13 +262,71 @@ function CompanyComparison() {
     const company = companies.find(c => c.id === id);
     if (!company.has_data) return;
 
-    setSelectedIds(prev => {
-      if (prev.includes(id)) {
-        return prev.filter(i => i !== id);
+    // 如果已经选择过产品，则取消选择
+    if (selectedIds.includes(id)) {
+      setSelectedIds(prev => prev.filter(i => i !== id));
+      setSelectedProductsByCompany(prev => {
+        const newState = { ...prev };
+        delete newState[id];
+        return newState;
+      });
+      return;
+    }
+
+    // 如果公司有多个产品，弹出产品选择对话框
+    if (company.has_multiple_products && company.products && company.products.length > 1) {
+      setCurrentCompanyForSelection(company);
+      // 初始化临时选择（如果之前选过，则恢复）
+      setTempSelectedProducts(selectedProductsByCompany[id] || []);
+      setShowProductSelector(true);
+      return;
+    }
+
+    // 单一产品，直接选中
+    if (company.products && company.products.length === 1) {
+      setSelectedIds(prev => [...prev, id]);
+      setSelectedProductsByCompany(prev => ({
+        ...prev,
+        [id]: [company.products[0].product_id]
+      }));
+    }
+  };
+
+  // 处理产品多选（复选框）
+  const handleProductToggle = (productId) => {
+    setTempSelectedProducts(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
       } else {
-        return [...prev, id];
+        return [...prev, productId];
       }
     });
+  };
+
+  // 确认产品选择
+  const handleConfirmProductSelection = () => {
+    if (tempSelectedProducts.length === 0) {
+      alert('请至少选择一个产品');
+      return;
+    }
+
+    const company = currentCompanyForSelection;
+
+    // 保存选中的产品
+    setSelectedProductsByCompany(prev => ({
+      ...prev,
+      [company.id]: tempSelectedProducts
+    }));
+
+    // 添加公司到选中列表
+    if (!selectedIds.includes(company.id)) {
+      setSelectedIds(prev => [...prev, company.id]);
+    }
+
+    // 关闭对话框
+    setShowProductSelector(false);
+    setCurrentCompanyForSelection(null);
+    setTempSelectedProducts([]);
   };
 
   // 计算IRR（修正版：保费期初缴纳，退保价值期末）
@@ -334,11 +400,34 @@ function CompanyComparison() {
       return;
     }
 
-    const selectedCompanies = companies.filter(c => selectedIds.includes(c.id));
-    const companiesWithoutData = selectedCompanies.filter(company => !company.has_data || !company.standard_data);
+    // 展开选中的产品，构建对比数据
+    const expandedCompanies = [];
+    selectedIds.forEach(companyId => {
+      const company = companies.find(c => c.id === companyId);
+      if (!company || !company.has_data) return;
 
-    if (companiesWithoutData.length > 0) {
-      alert(`以下保险公司没有标准退保数据：\n${companiesWithoutData.map(c => c.name).join('\n')}`);
+      const selectedProductIds = selectedProductsByCompany[companyId] || [];
+      if (selectedProductIds.length === 0) return;
+
+      // 为每个选中的产品创建一个对比项
+      selectedProductIds.forEach(productId => {
+        const product = company.products.find(p => p.product_id === productId);
+        if (product && product.standard_data) {
+          expandedCompanies.push({
+            id: `${companyId}_${productId}`, // 组合ID
+            company_id: companyId,
+            product_id: productId,
+            name: company.name,
+            icon: company.icon,
+            flagship_product: product.product_name,
+            standard_data: product.standard_data
+          });
+        }
+      });
+    });
+
+    if (expandedCompanies.length === 0) {
+      alert('没有有效的产品数据可供对比');
       return;
     }
 
@@ -359,12 +448,12 @@ function CompanyComparison() {
       }
     }
 
-    const firstCompanyData = selectedCompanies[0]?.standard_data?.standard;
+    const firstCompanyData = expandedCompanies[0]?.standard_data?.standard;
     const standardAnnualPremium = firstCompanyData?.[0]?.premiums_paid || 10000;
     const premiumRatio = paymentAmount / standardAnnualPremium;
 
     let allYears = new Set();
-    selectedCompanies.forEach(company => {
+    expandedCompanies.forEach(company => {
       const years = company.standard_data?.standard || [];
       years.forEach(y => {
         if (y.policy_year) allYears.add(y.policy_year);
@@ -376,16 +465,34 @@ function CompanyComparison() {
 
     if (useCustomAges && customAgesInput.trim()) {
       const inputs = customAgesInput
-        .replace(/[,，\s]+/g, ',')
+        .replace(/，/g, ',')
         .split(',')
         .map(item => item.trim())
         .filter(item => item);
 
       const customYears = new Set();
       inputs.forEach(input => {
-        const year = parseInt(input);
-        if (!isNaN(year) && allYears.has(year)) {
-          customYears.add(year);
+        // 检查是否为范围格式 (例如: "1-9" 或 "1 - 6" 或 "1  -  6")
+        if (input.includes('-')) {
+          const parts = input.split('-').map(p => p.trim()).filter(p => p);
+          if (parts.length === 2) {
+            const start = parseInt(parts[0]);
+            const end = parseInt(parts[1]);
+            if (!isNaN(start) && !isNaN(end) && start <= end) {
+              // 展开范围内的所有年度
+              for (let year = start; year <= end; year++) {
+                if (allYears.has(year)) {
+                  customYears.add(year);
+                }
+              }
+            }
+          }
+        } else {
+          // 单个年度
+          const year = parseInt(input);
+          if (!isNaN(year) && allYears.has(year)) {
+            customYears.add(year);
+          }
         }
       });
 
@@ -405,7 +512,7 @@ function CompanyComparison() {
       }
     }
 
-    const comparison = selectedCompanies.map(company => {
+    const comparison = expandedCompanies.map(company => {
       const years = company.standard_data?.standard || [];
       const yearData = {};
       const allYearData = {};
@@ -480,6 +587,61 @@ function CompanyComparison() {
     setSelectedYears([]);
   };
 
+  // 应用范围选择
+  const handleApplyYearRange = () => {
+    if (!yearRangeInput.trim()) {
+      alert('请输入年度范围，例如：1-4 或 1-4,10,20-25');
+      return;
+    }
+
+    // 先将中文逗号替换为英文逗号，然后按逗号分割
+    const inputs = yearRangeInput
+      .replace(/，/g, ',')
+      .split(',')
+      .map(item => item.trim())
+      .filter(item => item);
+
+    const yearsToAdd = new Set();
+    inputs.forEach(input => {
+      // 检查是否为范围格式 (例如: "1-9" 或 "1 - 6" 或 "1  -  6")
+      if (input.includes('-')) {
+        const parts = input.split('-').map(p => p.trim()).filter(p => p);
+        if (parts.length === 2) {
+          const start = parseInt(parts[0]);
+          const end = parseInt(parts[1]);
+          if (!isNaN(start) && !isNaN(end) && start <= end) {
+            // 展开范围内的所有年度
+            for (let year = start; year <= end; year++) {
+              if (availableYears.includes(year)) {
+                yearsToAdd.add(year);
+              }
+            }
+          }
+        }
+      } else {
+        // 单个年度
+        const year = parseInt(input);
+        if (!isNaN(year) && availableYears.includes(year)) {
+          yearsToAdd.add(year);
+        }
+      }
+    });
+
+    if (yearsToAdd.size === 0) {
+      alert('输入的年度不在可选范围内，请检查输入');
+      return;
+    }
+
+    // 合并到已选年份（不重复）
+    setSelectedYears(prev => {
+      const merged = new Set([...prev, ...yearsToAdd]);
+      return Array.from(merged).sort((a, b) => a - b);
+    });
+
+    // 清空输入框
+    setYearRangeInput('');
+  };
+
   // 确认选择年份
   const handleConfirmYears = () => {
     if (selectedYears.length === 0) {
@@ -492,9 +654,40 @@ function CompanyComparison() {
 
   // 打开年份选择器
   const handleOpenYearSelector = () => {
-    // 同步当前输入框的值到选择器
-    const currentYears = customAgesInput.split(',').map(y => parseInt(y.trim())).filter(y => !isNaN(y));
-    setSelectedYears(currentYears);
+    // 同步当前输入框的值到选择器，支持解析范围格式（如 "1-5" 或 "1 - 5"）
+    const inputs = customAgesInput
+      .replace(/，/g, ',')
+      .split(',')
+      .map(item => item.trim())
+      .filter(item => item);
+
+    const parsedYears = new Set();
+    inputs.forEach(input => {
+      // 检查是否为范围格式 (例如: "1-9" 或 "1 - 6" 或 "1  -  6")
+      if (input.includes('-')) {
+        const parts = input.split('-').map(p => p.trim()).filter(p => p);
+        if (parts.length === 2) {
+          const start = parseInt(parts[0]);
+          const end = parseInt(parts[1]);
+          if (!isNaN(start) && !isNaN(end) && start <= end) {
+            // 展开范围内的所有年度
+            for (let year = start; year <= end; year++) {
+              if (availableYears.includes(year)) {
+                parsedYears.add(year);
+              }
+            }
+          }
+        }
+      } else {
+        // 单个年度
+        const year = parseInt(input);
+        if (!isNaN(year) && availableYears.includes(year)) {
+          parsedYears.add(year);
+        }
+      }
+    });
+
+    setSelectedYears(Array.from(parsedYears).sort((a, b) => a - b));
     setShowYearSelector(true);
   };
 
@@ -1209,10 +1402,19 @@ function CompanyComparison() {
                   }
                 `}
               >
+                {/* 选中状态标记 */}
                 {selectedIds.includes(company.id) && (
-                  <div className="absolute top-1.5 right-1.5 md:top-2 md:right-2 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-1 md:p-1.5 shadow-[0_6px_20px_rgba(99,102,241,0.6)]">
-                    <Check className="w-4 h-4 md:w-6 md:h-6 text-white stroke-[3]" />
-                  </div>
+                  <>
+                    <div className="absolute top-1.5 right-1.5 md:top-2 md:right-2 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl p-1 md:p-1.5 shadow-[0_6px_20px_rgba(99,102,241,0.6)]">
+                      <Check className="w-4 h-4 md:w-6 md:h-6 text-white stroke-[3]" />
+                    </div>
+                    {/* 显示已选产品数量（仅多产品公司） */}
+                    {company.has_multiple_products && selectedProductsByCompany[company.id] && selectedProductsByCompany[company.id].length > 1 && (
+                      <div className="absolute top-1 left-1 md:top-1.5 md:left-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs md:text-sm font-bold px-2 py-0.5 md:px-2.5 md:py-1 rounded-full shadow-lg z-10">
+                        {selectedProductsByCompany[company.id].length}个产品
+                      </div>
+                    )}
+                  </>
                 )}
 
                 <div className={`flex items-center justify-center ${isFWD ? 'mt-4 md:mt-5 mb-2 md:mb-3' : '-mb-1'}`}>
@@ -1230,11 +1432,32 @@ function CompanyComparison() {
                   {company.name_en && (
                     <p className={`text-[10px] md:text-xs ${currentThemeConfig.textSub} line-clamp-1 leading-none`}>{company.name_en}</p>
                   )}
-                  {company.flagship_product && (
-                    <p className={`text-xs md:text-base ${currentTheme === 'luxury' ? 'text-amber-400' : 'text-indigo-700'} font-bold line-clamp-2 px-0.5 leading-tight`} style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>
-                      {company.flagship_product}
-                    </p>
-                  )}
+                  {/* 显示所有产品名称 */}
+                  {(() => {
+                    // 如果公司有产品列表，显示所有产品名称
+                    if (company.products && company.products.length > 0) {
+                      const productNames = company.products.map(p => p.product_name);
+
+                      return (
+                        <div className={`text-xs md:text-base ${currentTheme === 'luxury' ? 'text-amber-400' : 'text-indigo-700'} font-bold px-0.5 leading-tight space-y-0.5`} style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>
+                          {productNames.map((name, idx) => (
+                            <div key={idx} className="line-clamp-2">{name}</div>
+                          ))}
+                        </div>
+                      );
+                    }
+
+                    // 否则显示默认产品名称（兜底）
+                    if (company.flagship_product) {
+                      return (
+                        <p className={`text-xs md:text-base ${currentTheme === 'luxury' ? 'text-amber-400' : 'text-indigo-700'} font-bold line-clamp-2 px-0.5 leading-tight`} style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>
+                          {company.flagship_product}
+                        </p>
+                      );
+                    }
+
+                    return null;
+                  })()}
                 </div>
 
                 {/* 隐藏有数据/暂无数据标签 */}
@@ -1275,11 +1498,19 @@ function CompanyComparison() {
                 <input
                   type="text"
                   value={customAgesInput}
-                  readOnly
-                  onClick={handleOpenYearSelector}
-                  placeholder="点击选择显示年度"
-                  className="flex-1 px-2 md:px-4 py-2 md:py-2.5 border border-gray-200/80 bg-white/90 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm md:text-base shadow-sm cursor-pointer hover:border-blue-400/50 hover:bg-blue-50/30"
+                  onChange={(e) => setCustomAgesInput(e.target.value)}
+                  placeholder="输入年度，用逗号分隔（如：1,5,10,20）"
+                  className="flex-1 px-2 md:px-4 py-2 md:py-2.5 border border-gray-200/80 bg-white/90 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm md:text-base shadow-sm"
                 />
+                <button
+                  onClick={handleOpenYearSelector}
+                  className="flex items-center justify-center gap-1 md:gap-2 px-6 md:px-8 py-2 md:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-sm md:text-base whitespace-nowrap min-w-[100px] md:min-w-[120px]"
+                >
+                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  <span>选择年度</span>
+                </button>
               </div>
             )}
             {!useCustomAges && (
@@ -1306,6 +1537,87 @@ function CompanyComparison() {
         max={calculatorField === 'age' ? 100 : undefined}
       />
 
+      {/* 产品选择器模态框 */}
+      {showProductSelector && currentCompanyForSelection && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
+            {/* 标题栏 */}
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4">
+              <h3 className="text-2xl font-bold text-white text-center">{currentCompanyForSelection.name} - 选择产品</h3>
+              <p className="text-white/80 text-sm text-center mt-1">该公司有 {currentCompanyForSelection.products.length} 个{paymentYears}年期产品，可多选</p>
+            </div>
+
+            {/* 产品列表（多选模式） */}
+            <div className="p-6 max-h-[60vh] overflow-y-auto">
+              <div className="space-y-3">
+                {currentCompanyForSelection.products.map((product) => {
+                  const isSelected = tempSelectedProducts.includes(product.product_id);
+                  return (
+                    <label
+                      key={product.product_id}
+                      className={`
+                        flex items-center w-full p-4 rounded-2xl text-left transition-all cursor-pointer
+                        ${isSelected
+                          ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg scale-[1.02] ring-4 ring-purple-300'
+                          : 'bg-gray-50 hover:bg-gray-100 text-gray-900 hover:scale-[1.01] hover:shadow-md'
+                        }
+                      `}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => handleProductToggle(product.product_id)}
+                        className="w-5 h-5 rounded text-indigo-600 focus:ring-2 focus:ring-indigo-500 mr-4"
+                      />
+                      <div className="flex-1">
+                        <div className={`text-lg font-bold ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                          {product.product_name}
+                        </div>
+                        {product.standard_data && (
+                          <div className={`text-sm mt-1 ${isSelected ? 'text-white/80' : 'text-gray-600'}`}>
+                            {product.standard_data.standard.length} 个年度数据
+                          </div>
+                        )}
+                      </div>
+                      {isSelected && (
+                        <div className="ml-4 bg-white/20 rounded-full p-2">
+                          <Check className="w-6 h-6 text-white stroke-[3]" />
+                        </div>
+                      )}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 底部按钮 */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-3">
+              <div className="text-sm text-gray-600">
+                已选择 <span className="font-bold text-indigo-600">{tempSelectedProducts.length}</span> 个产品
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    setShowProductSelector(false);
+                    setCurrentCompanyForSelection(null);
+                    setTempSelectedProducts([]);
+                  }}
+                  className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all font-semibold"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={handleConfirmProductSelection}
+                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold"
+                >
+                  确认选择
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 年份选择器模态框 */}
       {showYearSelector && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -1317,19 +1629,44 @@ function CompanyComparison() {
             </div>
 
             {/* 操作按钮栏 */}
-            <div className="px-6 py-3 bg-gray-50 flex items-center justify-between gap-3 border-b border-gray-200">
-              <button
-                onClick={handleSelectAllYears}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all text-sm font-semibold"
-              >
-                全选
-              </button>
-              <button
-                onClick={handleClearAllYears}
-                className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-all text-sm font-semibold"
-              >
-                清空
-              </button>
+            <div className="px-6 py-3 bg-gray-50 border-b border-gray-200 space-y-3">
+              {/* 快捷操作按钮 */}
+              <div className="flex items-center justify-between gap-3">
+                <button
+                  onClick={handleSelectAllYears}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all text-sm font-semibold"
+                >
+                  全选
+                </button>
+                <button
+                  onClick={handleClearAllYears}
+                  className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-all text-sm font-semibold"
+                >
+                  清空
+                </button>
+              </div>
+
+              {/* 范围输入 */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={yearRangeInput}
+                  onChange={(e) => setYearRangeInput(e.target.value)}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleApplyYearRange();
+                    }
+                  }}
+                  placeholder="输入范围，如：1-4 或 1-4,10,20-25"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                />
+                <button
+                  onClick={handleApplyYearRange}
+                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all text-sm font-semibold whitespace-nowrap shadow-md"
+                >
+                  应用范围
+                </button>
+              </div>
             </div>
 
             {/* 年份网格 */}

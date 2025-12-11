@@ -51,6 +51,9 @@ def get_companies_standard_comparison(request):
     从 insurance_products 表获取数据，支持按缴费年限筛选
     【公开API - 无需登录】
 
+    ⚠️ 重要变更：返回公司级别数据，包含产品列表
+    前端点击公司后弹出产品选择对话框，支持多选产品进行对比
+
     查询参数:
         payment_period: 缴费年限（可选，默认5年）例如：1, 2, 5
     """
@@ -68,35 +71,56 @@ def get_companies_standard_comparison(request):
 
         company_list = []
         for company in companies:
-            # 从 insurance_products 表查询该公司对应年期的产品
-            product = InsuranceProduct.objects.filter(
+            # 从 insurance_products 表查询该公司对应年期的所有产品
+            products = InsuranceProduct.objects.filter(
                 company=company,
                 payment_period=payment_period,
                 is_active=True
-            ).first()
+            ).order_by('sort_order', 'id')
 
-            # 解析产品的 surrender_value_table 数据
-            standard_data = None
-            has_data = False
-            product_name = company.flagship_product or ''
+            # 解析所有产品数据
+            products_data = []
+            for product in products:
+                standard_data = None
+                has_data = False
 
-            if product and product.surrender_value_table:
-                try:
-                    # surrender_value_table 是 TextField，存储 JSON 字符串
-                    surrender_table = json.loads(product.surrender_value_table)
+                if product.surrender_value_table:
+                    try:
+                        # surrender_value_table 是 TextField，存储 JSON 字符串
+                        surrender_table = json.loads(product.surrender_value_table)
 
-                    # 检查是否有有效的数据
-                    if surrender_table and isinstance(surrender_table, list) and len(surrender_table) > 0:
-                        # 转换为与原格式兼容的数据结构
-                        standard_data = {
-                            'standard': surrender_table
-                        }
-                        has_data = True
-                        product_name = product.product_name
-                except json.JSONDecodeError:
-                    standard_data = None
+                        # 检查是否有有效的数据（支持两种格式）
+                        if surrender_table:
+                            # 格式1: 列表格式 [{"year": 1, ...}, ...]
+                            if isinstance(surrender_table, list) and len(surrender_table) > 0:
+                                standard_data = {
+                                    'standard': surrender_table
+                                }
+                                has_data = True
+                            # 格式2: 字典格式 {"standard": [...]}
+                            elif isinstance(surrender_table, dict) and 'standard' in surrender_table:
+                                if isinstance(surrender_table['standard'], list) and len(surrender_table['standard']) > 0:
+                                    standard_data = surrender_table
+                                    has_data = True
+                    except json.JSONDecodeError:
+                        standard_data = None
 
-            company_list.append({
+                if has_data:  # 只添加有数据的产品
+                    products_data.append({
+                        'product_id': product.id,
+                        'product_name': product.product_name,
+                        'standard_data': standard_data
+                    })
+
+            # 判断公司是否有数据
+            has_data = len(products_data) > 0
+
+            # 构建公司数据
+            # 只返回有数据的公司（没有产品的公司不显示）
+            if not has_data:
+                continue
+
+            company_data = {
                 'id': company.id,
                 'code': company.code,
                 'name': company.name,
@@ -104,11 +128,17 @@ def get_companies_standard_comparison(request):
                 'icon': company.icon,
                 'color_gradient': company.color_gradient,
                 'bg_color': company.bg_color,
-                'flagship_product': product_name,  # 使用产品名称
+                'flagship_product': company.flagship_product or '',
                 'has_data': has_data,
-                'standard_data': standard_data,
-                'payment_period': payment_period  # 返回当前查询的缴费年限
-            })
+                'payment_period': payment_period,
+                'products': products_data  # 产品列表
+            }
+
+            # 标记是否有多个产品
+            if len(products_data) > 1:
+                company_data['has_multiple_products'] = True
+
+            company_list.append(company_data)
 
         return Response({
             'status': 'success',
