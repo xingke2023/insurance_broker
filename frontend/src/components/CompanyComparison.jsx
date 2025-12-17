@@ -26,7 +26,7 @@ function CompanyComparison() {
   const [annualPremium] = useState(10000); // 假设年缴保费
 
   // 演示用客户信息
-  const [customerAge, setCustomerAge] = useState(30);
+  const [customerAge, setCustomerAge] = useState(20);
   const [customerGender, setCustomerGender] = useState('male');
   const [paymentAmount, setPaymentAmount] = useState(10000);
   const [paymentYears, setPaymentYears] = useState(5); // 缴费年限
@@ -69,7 +69,7 @@ function CompanyComparison() {
       total: true,
       simpleReturn: true,
       irr: true,
-      breakEven: false,  // 回本期标记
+      breakEven: true,  // 回本期标记
       highlightBest: true  // 按年度最优
     };
   });
@@ -228,9 +228,26 @@ function CompanyComparison() {
   const fetchCompanies = async (paymentPeriod = paymentYears) => {
     setLoading(true);
     try {
+      // 获取用户的产品设置
+      const token = localStorage.getItem('access_token');
+      let selectedProductIds = [];
+
+      if (token) {
+        try {
+          const settingsResponse = await axios.get('/api/user/product-comparison-settings', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          selectedProductIds = settingsResponse.data.selected_products || [];
+        } catch (err) {
+          console.log('未获取到用户产品设置，将显示所有产品');
+        }
+      }
+
+      // 获取公司列表，传递用户选择的产品ID
       const response = await axios.get('/api/insurance-companies/standard-comparison/', {
         params: {
-          payment_period: paymentPeriod
+          payment_period: paymentPeriod,
+          selected_product_ids: selectedProductIds.length > 0 ? selectedProductIds.join(',') : undefined
         }
       });
       const data = response.data;
@@ -253,6 +270,13 @@ function CompanyComparison() {
   // 处理缴费年限变化
   const handlePaymentYearsChange = (years) => {
     setPaymentYears(years);
+    // 如果缴费年限为1年或2年，默认设置年缴保费为100000
+    if (years === 1 || years === 2) {
+      setPaymentAmount(100000);
+    } else if (paymentAmount === 100000) {
+      // 如果之前是1-2年期的100000，切换到其他年限时恢复为10000
+      setPaymentAmount(10000);
+    }
     setSelectedIds([]); // 清空已选择的公司
     setSelectedProductsByCompany({}); // 清空已选择的产品
     fetchCompanies(years); // 重新获取数据
@@ -448,10 +472,6 @@ function CompanyComparison() {
       }
     }
 
-    const firstCompanyData = expandedCompanies[0]?.standard_data?.standard;
-    const standardAnnualPremium = firstCompanyData?.[0]?.premiums_paid || 10000;
-    const premiumRatio = paymentAmount / standardAnnualPremium;
-
     let allYears = new Set();
     expandedCompanies.forEach(company => {
       const years = company.standard_data?.standard || [];
@@ -514,6 +534,12 @@ function CompanyComparison() {
 
     const comparison = expandedCompanies.map(company => {
       const years = company.standard_data?.standard || [];
+
+      // ✅ 关键修改：每个公司用自己的标准保费计算比例
+      // 而不是用第一个公司的标准保费
+      const companyStandardPremium = years[0]?.premiums_paid || 10000;
+      const companyPremiumRatio = paymentAmount / companyStandardPremium;
+
       const yearData = {};
       const allYearData = {};
 
@@ -521,10 +547,10 @@ function CompanyComparison() {
         const data = years.find(y => y.policy_year === targetYear);
         if (data) {
           yearData[targetYear] = {
-            guaranteed: Math.round(data.guaranteed * premiumRatio),
-            non_guaranteed: Math.round(data.non_guaranteed * premiumRatio),
-            total: Math.round(data.total * premiumRatio),
-            premiums_paid: Math.round(data.premiums_paid * premiumRatio)
+            guaranteed: Math.round(data.guaranteed * companyPremiumRatio),
+            non_guaranteed: Math.round(data.non_guaranteed * companyPremiumRatio),
+            total: Math.round(data.total * companyPremiumRatio),
+            premiums_paid: Math.round(data.premiums_paid * companyPremiumRatio)
           };
         } else {
           yearData[targetYear] = {
@@ -539,10 +565,10 @@ function CompanyComparison() {
       years.forEach(yearItem => {
         const year = yearItem.policy_year;
         allYearData[year] = {
-          guaranteed: Math.round(yearItem.guaranteed * premiumRatio),
-          non_guaranteed: Math.round(yearItem.non_guaranteed * premiumRatio),
-          total: Math.round(yearItem.total * premiumRatio),
-          premiums_paid: Math.round(yearItem.premiums_paid * premiumRatio)
+          guaranteed: Math.round(yearItem.guaranteed * companyPremiumRatio),
+          non_guaranteed: Math.round(yearItem.non_guaranteed * companyPremiumRatio),
+          total: Math.round(yearItem.total * companyPremiumRatio),
+          premiums_paid: Math.round(yearItem.premiums_paid * companyPremiumRatio)
         };
       });
 
@@ -866,7 +892,7 @@ function CompanyComparison() {
                 </div>
               </div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-wide text-center" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>保单现金价值对比和分析</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-wide text-center" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>港險儲蓄型產品按年收益數據表</h2>
 
               {/* 客户信息展示 */}
               <div className="mt-4">
@@ -945,7 +971,7 @@ function CompanyComparison() {
                               </th>
                             )}
                             {visibleColumns.total && (
-                              <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-amber-300' : 'text-indigo-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'total' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>总额</th>
+                              <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-amber-300' : 'text-indigo-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'total' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>总价值</th>
                             )}
                             {visibleColumns.simpleReturn && (
                               <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-purple-300' : 'text-purple-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'simpleReturn' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>单利</th>
@@ -966,7 +992,7 @@ function CompanyComparison() {
                       ? firstCompanyData.premiums_paid
                       : annualPremium * year;
 
-                    // 找出该年度总额最大的公司
+                    // 找出该年度总价值最大的公司
                     let maxTotal = -Infinity;
                     comparisonData.companies.forEach(company => {
                       const data = company.yearData[year];
@@ -1028,7 +1054,7 @@ function CompanyComparison() {
                             }
                           }
 
-                          // 判断是否是该年度表现最好的公司（总额最大）
+                          // 判断是否是该年度表现最好的公司（总价值最大）
                           const isBest = visibleColumns.highlightBest && totalValue > 0 && totalValue === maxTotal;
                           const bestCellClass = isBest ? 'bg-red-100' : '';
                           const bestTextClass = isBest ? 'text-red-700 font-extrabold' : '';
@@ -1155,7 +1181,7 @@ function CompanyComparison() {
                           className="w-4 h-4 rounded text-indigo-500"
                         />
                         <div className="flex-1">
-                          <div className="text-sm font-semibold text-gray-900">总额</div>
+                          <div className="text-sm font-semibold text-gray-900">总价值</div>
                         </div>
                       </label>
 
@@ -1254,7 +1280,10 @@ function CompanyComparison() {
         <div className="mb-3 md:mb-5">
           {/* 标题 */}
           <div className="mb-2 md:mb-4 text-center">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>产品比对分析工具</h1>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>
+              港險儲蓄型產品收益數據表
+              <span className="text-xl md:text-2xl lg:text-3xl">（2025年12月）</span>
+            </h1>
             <p className="text-xs md:text-sm text-gray-500 mt-2">数据最新更新日期 09/12/2025</p>
           </div>
 
@@ -1539,26 +1568,27 @@ function CompanyComparison() {
 
       {/* 产品选择器模态框 */}
       {showProductSelector && currentCompanyForSelection && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] overflow-y-auto">
+          <div className="min-h-full flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-white rounded-xl sm:rounded-3xl shadow-2xl w-full max-w-[340px] sm:max-w-md md:max-w-lg max-h-[88vh] overflow-hidden flex flex-col">
             {/* 标题栏 */}
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4">
-              <h3 className="text-2xl font-bold text-white text-center">{currentCompanyForSelection.name} - 选择产品</h3>
-              <p className="text-white/80 text-sm text-center mt-1">该公司有 {currentCompanyForSelection.products.length} 个{paymentYears}年期产品，可多选</p>
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-3 py-2 sm:px-6 sm:py-4 flex-shrink-0">
+              <h3 className="text-sm sm:text-2xl font-bold text-white text-center leading-tight">{currentCompanyForSelection.name} - 选择产品</h3>
+              <p className="text-white/80 text-[11px] sm:text-sm text-center mt-0.5 sm:mt-1">该公司有 {currentCompanyForSelection.products.length} 个{paymentYears}年期产品，可多选</p>
             </div>
 
             {/* 产品列表（多选模式） */}
-            <div className="p-6 max-h-[60vh] overflow-y-auto">
-              <div className="space-y-3">
+            <div className="p-2 sm:p-6 overflow-y-auto flex-1">
+              <div className="space-y-2 sm:space-y-3">
                 {currentCompanyForSelection.products.map((product) => {
                   const isSelected = tempSelectedProducts.includes(product.product_id);
                   return (
                     <label
                       key={product.product_id}
                       className={`
-                        flex items-center w-full p-4 rounded-2xl text-left transition-all cursor-pointer
+                        flex items-center w-full p-2 sm:p-4 rounded-lg sm:rounded-2xl text-left transition-all cursor-pointer
                         ${isSelected
-                          ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg scale-[1.02] ring-4 ring-purple-300'
+                          ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg scale-[1.02] ring-2 sm:ring-4 ring-purple-300'
                           : 'bg-gray-50 hover:bg-gray-100 text-gray-900 hover:scale-[1.01] hover:shadow-md'
                         }
                       `}
@@ -1567,21 +1597,21 @@ function CompanyComparison() {
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => handleProductToggle(product.product_id)}
-                        className="w-5 h-5 rounded text-indigo-600 focus:ring-2 focus:ring-indigo-500 mr-4"
+                        className="w-3.5 h-3.5 sm:w-5 sm:h-5 rounded text-indigo-600 focus:ring-2 focus:ring-indigo-500 mr-2 sm:mr-4 flex-shrink-0"
                       />
-                      <div className="flex-1">
-                        <div className={`text-lg font-bold ${isSelected ? 'text-white' : 'text-gray-900'}`}>
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-xs sm:text-lg font-bold ${isSelected ? 'text-white' : 'text-gray-900'} break-words leading-tight`}>
                           {product.product_name}
                         </div>
                         {product.standard_data && (
-                          <div className={`text-sm mt-1 ${isSelected ? 'text-white/80' : 'text-gray-600'}`}>
+                          <div className={`text-[10px] sm:text-sm mt-0.5 sm:mt-1 ${isSelected ? 'text-white/80' : 'text-gray-600'}`}>
                             {product.standard_data.standard.length} 个年度数据
                           </div>
                         )}
                       </div>
                       {isSelected && (
-                        <div className="ml-4 bg-white/20 rounded-full p-2">
-                          <Check className="w-6 h-6 text-white stroke-[3]" />
+                        <div className="ml-1.5 sm:ml-4 bg-white/20 rounded-full p-0.5 sm:p-2 flex-shrink-0">
+                          <Check className="w-3.5 h-3.5 sm:w-6 sm:h-6 text-white stroke-[3]" />
                         </div>
                       )}
                     </label>
@@ -1591,28 +1621,29 @@ function CompanyComparison() {
             </div>
 
             {/* 底部按钮 */}
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-3">
-              <div className="text-sm text-gray-600">
-                已选择 <span className="font-bold text-indigo-600">{tempSelectedProducts.length}</span> 个产品
+            <div className="px-2.5 py-2 sm:px-6 sm:py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-1.5 sm:gap-3 flex-shrink-0">
+              <div className="text-[10px] sm:text-sm text-gray-600">
+                已选 <span className="font-bold text-indigo-600">{tempSelectedProducts.length}</span> 个
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 sm:gap-3">
                 <button
                   onClick={() => {
                     setShowProductSelector(false);
                     setCurrentCompanyForSelection(null);
                     setTempSelectedProducts([]);
                   }}
-                  className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all font-semibold"
+                  className="px-2.5 py-1.5 sm:px-6 sm:py-2.5 bg-gray-200 text-gray-700 rounded-md sm:rounded-xl hover:bg-gray-300 transition-all font-semibold text-[11px] sm:text-base"
                 >
                   取消
                 </button>
                 <button
                   onClick={handleConfirmProductSelection}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold"
+                  className="px-2.5 py-1.5 sm:px-6 sm:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-md sm:rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-[11px] sm:text-base"
                 >
                   确认选择
                 </button>
               </div>
+            </div>
             </div>
           </div>
         </div>
