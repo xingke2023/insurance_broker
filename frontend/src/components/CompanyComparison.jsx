@@ -64,8 +64,8 @@ function CompanyComparison() {
   const [visibleColumns, setVisibleColumns] = useState(() => {
     const saved = localStorage.getItem('visibleColumns');
     return saved ? JSON.parse(saved) : {
-      guaranteed: true,
-      nonGuaranteed: true,
+      guaranteed: false,
+      nonGuaranteed: false,
       total: true,
       simpleReturn: true,
       irr: true,
@@ -977,7 +977,7 @@ function CompanyComparison() {
                               <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-purple-300' : 'text-purple-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'simpleReturn' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>单利</th>
                             )}
                             {visibleColumns.irr && (
-                              <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-green-400' : 'text-green-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'irr' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>IRR</th>
+                              <th className={`${isCompactMode ? 'px-1 py-1' : 'px-2 py-2'} text-center ${isCompactMode ? 'text-[10px]' : 'text-xs'} font-semibold ${currentTheme === 'luxury' ? 'text-green-400' : 'text-green-700'} whitespace-nowrap bg-gradient-to-r ${currentThemeConfig.tableSubHeaderBg} ${lastVisibleColumn === 'irr' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>IRR(复利)</th>
                             )}
                           </React.Fragment>
                         );
@@ -1083,7 +1083,7 @@ function CompanyComparison() {
                               {visibleColumns.total && (
                                 <td className={`relative ${isCompactMode ? 'px-0.5 py-1' : 'px-2 py-2.5'} ${isCompactMode ? 'text-xs' : 'text-base'} font-bold text-center whitespace-nowrap ${currentTheme === 'luxury' ? 'text-amber-300 bg-amber-900/10' : 'text-indigo-700 bg-indigo-50/30'} ${bestCellClass} ${bestTextClass} ${breakEvenBorder} ${lastVisibleColumn === 'total' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>
                                   {isBreakEvenYear && (
-                                    <span className="absolute top-0.5 right-0.5 bg-red-500/40 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
+                                    <span className="absolute bottom-0.5 right-0.5 bg-red-500/40 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
                                       回本
                                     </span>
                                   )}
@@ -1092,12 +1092,12 @@ function CompanyComparison() {
                               )}
                               {visibleColumns.simpleReturn && (
                                 <td className={`${isCompactMode ? 'px-0.5 py-1' : 'px-2 py-2.5'} ${isCompactMode ? 'text-xs' : 'text-base'} font-bold text-center whitespace-nowrap ${currentTheme === 'luxury' ? 'text-purple-300' : 'text-purple-600'} ${bestCellClass} ${lastVisibleColumn === 'simpleReturn' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>
-                                  {simpleReturn !== null ? `${simpleReturn.toFixed(isCompactMode ? 1 : 2)}%` : '-'}
+                                  {simpleReturn !== null && simpleReturn >= -30 ? `${simpleReturn.toFixed(isCompactMode ? 1 : 2)}%` : '-'}
                                 </td>
                               )}
                               {visibleColumns.irr && (
                                 <td className={`${isCompactMode ? 'px-0.5 py-1' : 'px-2 py-2.5'} ${isCompactMode ? 'text-xs' : 'text-base'} font-bold text-center whitespace-nowrap ${currentTheme === 'luxury' ? 'text-green-400 bg-green-900/10' : 'text-green-600 bg-green-50/30'} ${bestCellClass} ${lastVisibleColumn === 'irr' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>
-                                  {irr !== null ? `${irr.toFixed(2)}%` : '-'}
+                                  {irr !== null && irr >= -30 ? `${irr.toFixed(2)}%` : '-'}
                                 </td>
                               )}
                             </React.Fragment>
@@ -1205,7 +1205,7 @@ function CompanyComparison() {
                           className="w-4 h-4 rounded text-green-500"
                         />
                         <div className="flex-1">
-                          <div className="text-sm font-semibold text-gray-900">IRR（内部收益率）</div>
+                          <div className="text-sm font-semibold text-gray-900">IRR(年化复利)</div>
                         </div>
                       </label>
                     </div>
@@ -1277,11 +1277,11 @@ function CompanyComparison() {
 
       <div className="max-w-[98%] mx-auto">
         {/* 头部 */}
-        <div className="mb-3 md:mb-5">
+        <div className="mb-3 md:mb-5 pt-12 md:pt-0">
           {/* 标题 */}
           <div className="mb-2 md:mb-4 text-center">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>
-              港險儲蓄型產品收益數據表
+              港險儲蓄型產品收益數據統計表
               <span className="text-xl md:text-2xl lg:text-3xl">（2025年12月）</span>
             </h1>
             <p className="text-xs md:text-sm text-gray-500 mt-2">数据最新更新日期 09/12/2025</p>
@@ -1289,7 +1289,7 @@ function CompanyComparison() {
 
           {/* 提示文字与对比按钮 */}
           <div className="mb-2 md:mb-3 flex items-center justify-between gap-4">
-            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-indigo-900 drop-shadow-md" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>点击选择对比的公司</h2>
+            <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-indigo-900 drop-shadow-md" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>点击选择对比的公司</h2>
 
             {/* 对比按钮 */}
             <button
@@ -1520,22 +1520,22 @@ function CompanyComparison() {
                 onChange={(e) => setUseCustomAges(e.target.checked)}
                 className="w-4 h-4 rounded text-blue-500"
               />
-              <span className="text-gray-900 font-semibold text-sm md:text-base whitespace-nowrap">自定义显示年度</span>
+              <span className="text-gray-900 font-semibold text-sm md:text-base whitespace-nowrap">年度</span>
             </label>
             {useCustomAges && (
-              <div className="flex-1 flex items-center gap-2">
+              <div className="flex-1 relative">
                 <input
                   type="text"
                   value={customAgesInput}
                   onChange={(e) => setCustomAgesInput(e.target.value)}
                   placeholder="输入年度，用逗号分隔（如：1,5,10,20）"
-                  className="flex-1 px-2 md:px-4 py-2 md:py-2.5 border border-gray-200/80 bg-white/90 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm md:text-base shadow-sm"
+                  className="w-full pl-2 md:pl-4 pr-[90px] md:pr-[130px] py-2 md:py-2.5 border border-gray-200/80 bg-white/90 rounded-xl text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:border-blue-400/50 transition-all text-sm md:text-base shadow-sm"
                 />
                 <button
                   onClick={handleOpenYearSelector}
-                  className="flex items-center justify-center gap-1 md:gap-2 px-6 md:px-8 py-2 md:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-sm md:text-base whitespace-nowrap min-w-[100px] md:min-w-[120px]"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center gap-1 px-2 md:px-3 py-1.5 md:py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-xs md:text-sm whitespace-nowrap"
                 >
-                  <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-3 h-3 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                   </svg>
                   <span>选择年度</span>
@@ -1651,34 +1651,34 @@ function CompanyComparison() {
 
       {/* 年份选择器模态框 */}
       {showYearSelector && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 md:p-4">
+          <div className="bg-white rounded-2xl md:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] md:max-h-[80vh] overflow-hidden">
             {/* 标题栏 */}
-            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-6 py-4">
-              <h3 className="text-2xl font-bold text-white text-center">选择显示年度</h3>
-              <p className="text-white/80 text-sm text-center mt-1">已选择 {selectedYears.length} 个年度</p>
+            <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 px-3 py-2 md:px-6 md:py-4">
+              <h3 className="text-lg md:text-2xl font-bold text-white text-center">选择显示年度</h3>
+              <p className="text-white/80 text-xs md:text-sm text-center mt-0.5 md:mt-1">已选择 {selectedYears.length} 个年度</p>
             </div>
 
             {/* 操作按钮栏 */}
-            <div className="px-6 py-3 bg-gray-50 border-b border-gray-200 space-y-3">
+            <div className="px-2 py-2 md:px-6 md:py-3 bg-gray-50 border-b border-gray-200 space-y-2 md:space-y-3">
               {/* 快捷操作按钮 */}
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between gap-2 md:gap-3">
                 <button
                   onClick={handleSelectAllYears}
-                  className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all text-sm font-semibold"
+                  className="px-3 py-1.5 md:px-4 md:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all text-xs md:text-sm font-semibold"
                 >
                   全选
                 </button>
                 <button
                   onClick={handleClearAllYears}
-                  className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-all text-sm font-semibold"
+                  className="px-3 py-1.5 md:px-4 md:py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition-all text-xs md:text-sm font-semibold"
                 >
                   清空
                 </button>
               </div>
 
               {/* 范围输入 */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5 md:gap-2">
                 <input
                   type="text"
                   value={yearRangeInput}
@@ -1688,21 +1688,21 @@ function CompanyComparison() {
                       handleApplyYearRange();
                     }
                   }}
-                  placeholder="输入范围，如：1-4 或 1-4,10,20-25"
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                  placeholder="输入范围，如：1-4"
+                  className="flex-1 px-2 py-1.5 md:px-4 md:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs md:text-sm"
                 />
                 <button
                   onClick={handleApplyYearRange}
-                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all text-sm font-semibold whitespace-nowrap shadow-md"
+                  className="px-3 py-1.5 md:px-6 md:py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-lg hover:from-green-600 hover:to-emerald-600 transition-all text-xs md:text-sm font-semibold whitespace-nowrap shadow-md"
                 >
-                  应用范围
+                  应用
                 </button>
               </div>
             </div>
 
             {/* 年份网格 */}
-            <div className="p-6 overflow-y-auto max-h-[50vh]">
-              <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
+            <div className="p-2 md:p-6 overflow-y-auto max-h-[60vh] md:max-h-[50vh]">
+              <div className="grid grid-cols-5 md:grid-cols-6 gap-1.5 md:gap-3">
                 {availableYears.map(year => {
                   const isSelected = selectedYears.includes(year);
                   return (
@@ -1710,9 +1710,9 @@ function CompanyComparison() {
                       key={year}
                       onClick={() => handleYearToggle(year)}
                       className={`
-                        px-4 py-3 rounded-xl text-lg font-bold transition-all
+                        px-2 py-2 md:px-4 md:py-3 rounded-lg md:rounded-xl text-sm md:text-lg font-bold transition-all
                         ${isSelected
-                          ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg scale-105 ring-2 ring-purple-400'
+                          ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white shadow-lg scale-105 ring-1 md:ring-2 ring-purple-400'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
                         }
                       `}
@@ -1725,16 +1725,16 @@ function CompanyComparison() {
             </div>
 
             {/* 底部按钮 */}
-            <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-end gap-3">
+            <div className="px-2 py-2 md:px-6 md:py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-end gap-2 md:gap-3">
               <button
                 onClick={() => setShowYearSelector(false)}
-                className="px-6 py-2.5 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-all font-semibold"
+                className="px-4 py-2 md:px-6 md:py-2.5 bg-gray-200 text-gray-700 rounded-lg md:rounded-xl hover:bg-gray-300 transition-all font-semibold text-xs md:text-base"
               >
                 取消
               </button>
               <button
                 onClick={handleConfirmYears}
-                className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold"
+                className="px-4 py-2 md:px-6 md:py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg md:rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg font-semibold text-xs md:text-base"
               >
                 确认选择
               </button>

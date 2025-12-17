@@ -25,6 +25,9 @@ import WithdrawalCalculator from './components/WithdrawalCalculator'
 import InsuranceCompanyPage from './components/InsuranceCompanyPage'
 import ApiCallPage from './components/ApiCallPage'
 import CompanyComparison from './components/CompanyComparison'
+import MembershipPlans from './components/MembershipPlans'
+import Settings from './components/Settings'
+import ProductComparisonSettings from './components/ProductComparisonSettings'
 
 function App() {
   return (
@@ -36,6 +39,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/company-comparison" element={<CompanyComparison />} />
+            <Route path="/cc" element={<CompanyComparison />} />
 
             {/* 受保护的页面 - 需要登录 */}
             <Route path="/dashboard" element={
@@ -146,6 +150,21 @@ function App() {
             <Route path="/api-call/:companyCode/:requestName" element={
               <ProtectedRoute>
                 <ApiCallPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/membership-plans" element={
+              <ProtectedRoute>
+                <MembershipPlans />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } />
+            <Route path="/product-comparison-settings" element={
+              <ProtectedRoute>
+                <ProductComparisonSettings />
               </ProtectedRoute>
             } />
 
