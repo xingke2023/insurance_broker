@@ -6,6 +6,7 @@ import { API_BASE_URL } from '../config';
 import { ArrowLeftIcon, SparklesIcon, ArrowsPointingOutIcon, XMarkIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { handleMembershipError } from '../utils/membershipHelper';
 
 function PosterAnalyzer() {
   const { user } = useAuth();
@@ -123,7 +124,12 @@ function PosterAnalyzer() {
       }
     } catch (error) {
       console.error('海报分析失败:', error);
-      alert(error.response?.data?.error || '分析失败，请重试');
+
+      // 检查是否为会员权限错误
+      if (!handleMembershipError(error, onNavigate)) {
+        // 如果不是会员权限错误，显示普通错误消息
+        alert(error.response?.data?.error || '分析失败，请重试');
+      }
     } finally {
       setPosterAnalyzing(false);
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FileText, Eye, Calendar, ArrowLeft, Loader2, Search, Trash2, GitCompare, RefreshCw, Clock, X, CheckCircle } from 'lucide-react';
+import { FileText, Eye, Calendar, ArrowLeft, Loader2, Search, Trash2, GitCompare, RefreshCw, Clock, X, CheckCircle, MessageSquare } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import axios from 'axios';
@@ -101,6 +101,11 @@ function PlanDocumentManagement() {
   const handleViewDocument = (doc) => {
     // 跳转到文档详情页面
     onNavigate(`/document/${doc.id}`);
+  };
+
+  const handleOpenAssistant = (doc) => {
+    // 跳转到文档详情页面并自动打开计划书助手
+    onNavigate(`/document/${doc.id}?openChat=true`);
   };
 
   const handleViewProgress = async (docId) => {
@@ -987,6 +992,17 @@ function PlanDocumentManagement() {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
+                              handleOpenAssistant(doc);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs md:text-sm rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-colors"
+                            title="计划书助手"
+                          >
+                            <MessageSquare className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                            <span className="hidden lg:inline">助手</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
                               handleViewDocument(doc);
                             }}
                             className="inline-flex items-center gap-1 px-2 md:px-3 py-1 md:py-1.5 bg-indigo-600 text-white text-xs md:text-sm rounded-lg hover:bg-indigo-700 transition-colors"
@@ -1081,7 +1097,7 @@ function PlanDocumentManagement() {
                   </div>
 
                   {/* 计划书概要 */}
-                  <div>
+                  <div className="mb-3">
                     {(() => {
                       let summaryText = '';
                       if (doc.summary) {
@@ -1118,6 +1134,40 @@ function PlanDocumentManagement() {
                         );
                       }
                     })()}
+                  </div>
+
+                  {/* 操作按钮 */}
+                  <div className="flex gap-2 pt-3 border-t border-gray-200">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewProgress(doc.id);
+                      }}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>进度</span>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleOpenAssistant(doc);
+                      }}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-xs rounded-lg hover:from-cyan-700 hover:to-blue-700 transition-colors"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>助手</span>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleViewDocument(doc);
+                      }}
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-2 bg-indigo-600 text-white text-xs rounded-lg hover:bg-indigo-700 transition-colors"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>详情</span>
+                    </button>
                   </div>
                 </div>
               ))}

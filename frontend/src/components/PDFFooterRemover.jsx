@@ -370,6 +370,7 @@ function PDFFooterRemover() {
       // 添加擦除区域参数
       formData.append('remove_areas', JSON.stringify(removeAreas));
 
+      console.log('📤 发送PDF处理请求...');
       const token = localStorage.getItem('access_token');
       const response = await axios.post(
         `${API_BASE_URL}/api/pdf/remove-footer`,
@@ -383,33 +384,62 @@ function PDFFooterRemover() {
         }
       );
 
-      // 创建下载链接
-      const blob = new Blob([response.data], { type: 'application/pdf' });
-      const url = window.URL.createObjectURL(blob);
-      setProcessedFileUrl(url);
-      setRequiresPassword(false); // 成功后清除密码要求标志
+      console.log('✅ 收到响应:', response.status, response.statusText);
+      console.log('   响应大小:', response.data.size, 'bytes');
+      console.log('   响应类型:', response.data.type);
+
+      // 检查响应是否为PDF
+      if (response.data.type === 'application/pdf') {
+        // 创建下载链接
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        setProcessedFileUrl(url);
+        setRequiresPassword(false);
+        console.log('✅ PDF URL创建成功');
+      } else {
+        // 可能是错误响应被当作blob返回了
+        console.error('❌ 响应不是PDF格式:', response.data.type);
+        const text = await response.data.text();
+        console.error('   响应内容:', text);
+        setError('服务器返回了非PDF格式的响应');
+      }
 
     } catch (err) {
-      console.error('处理PDF失败:', err);
+      console.error('❌ 处理PDF失败:', err);
+      console.error('   错误详情:', {
+        message: err.message,
+        response: err.response,
+        status: err.response?.status,
+        statusText: err.response?.statusText
+      });
 
-      // 检查是否需要密码
-      if (err.response?.status === 400) {
+      // 检查是否需要密码或其他错误
+      if (err.response?.status === 400 || err.response?.status === 500) {
         try {
-          // 尝试解析错误响应
-          const errorText = await err.response.data.text();
-          const errorData = JSON.parse(errorText);
-
-          if (errorData.requires_password) {
-            setRequiresPassword(true);
-            setError('此PDF已加密，请输入密码');
+          // 如果响应是blob，尝试读取为文本
+          if (err.response.data instanceof Blob) {
+            const errorText = await err.response.data.text();
+            console.log('   错误响应内容:', errorText);
+            try {
+              const errorData = JSON.parse(errorText);
+              if (errorData.requires_password) {
+                setRequiresPassword(true);
+                setError('此PDF已加密，请输入密码');
+              } else {
+                setError(errorData.message || '处理PDF失败，请重试');
+              }
+            } catch (jsonErr) {
+              setError(errorText || '处理PDF失败，请重试');
+            }
           } else {
-            setError(errorData.message || '处理PDF失败，请重试');
+            setError(err.response?.data?.message || '处理PDF失败，请重试');
           }
         } catch (parseErr) {
-          setError(err.response?.data?.message || '处理PDF失败，请重试');
+          console.error('   解析错误响应失败:', parseErr);
+          setError('处理PDF失败，请重试');
         }
       } else {
-        setError(err.response?.data?.message || '处理PDF失败，请重试');
+        setError(err.message || '处理PDF失败，请检查网络连接');
       }
     } finally {
       setProcessing(false);
@@ -422,7 +452,7 @@ function PDFFooterRemover() {
 
     const link = document.createElement('a');
     link.href = processedFileUrl;
-    link.download = `${selectedFile.name.replace('.pdf', '')}_无页脚.pdf`;
+    link.download = `${selectedFile.name.replace('.pdf', '')}_计划书.pdf`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

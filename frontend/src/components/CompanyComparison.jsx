@@ -63,14 +63,19 @@ function CompanyComparison() {
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState(() => {
     const saved = localStorage.getItem('visibleColumns');
-    return saved ? JSON.parse(saved) : {
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    // 根据屏幕尺寸设置默认列显示
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    return {
       guaranteed: false,
       nonGuaranteed: false,
       total: true,
-      simpleReturn: true,
-      irr: true,
-      breakEven: true,  // 回本期标记
-      highlightBest: true  // 按年度最优
+      simpleReturn: !isMobile,  // 手机端隐藏单利
+      irr: !isMobile,           // 手机端隐藏IRR
+      breakEven: true,          // 回本期标记
+      highlightBest: true       // 按年度最优
     };
   });
 
@@ -892,7 +897,7 @@ function CompanyComparison() {
                 </div>
               </div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-wide text-center" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>港險儲蓄型產品按年收益數據表</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 tracking-wide text-center" style={{ fontFamily: "'Microsoft YaHei', '微软雅黑', sans-serif" }}>港險主打儲蓄型產品按年度收益統計表</h2>
 
               {/* 客户信息展示 */}
               <div className="mt-4">

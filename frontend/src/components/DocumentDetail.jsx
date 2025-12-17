@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ArrowLeft, User, Building2, Calendar, DollarSign, FileText, Loader2, AlertCircle, MessageSquare, Send, X, ChevronDown, ChevronUp } from 'lucide-react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authFetch } from '../utils/authFetch';
 import ReactMarkdown from 'react-markdown';
@@ -9,6 +9,7 @@ import rehypeRaw from 'rehype-raw';
 function DocumentDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const [document, setDocument] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +31,13 @@ function DocumentDetail() {
   useEffect(() => {
     fetchDocumentDetail();
   }, [id]);
+
+  // 检测URL参数，自动打开聊天窗口
+  useEffect(() => {
+    if (searchParams.get('openChat') === 'true' && document) {
+      handleOpenChat();
+    }
+  }, [searchParams, document]);
 
   const fetchDocumentDetail = async () => {
     setLoading(true);

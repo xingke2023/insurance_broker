@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django import forms
-from .models import InsurancePolicy, PlanDocument, AnnualValue, MembershipPlan, UserQuota, GeminiUsage, MediaLibrary, InsuranceCompany, InsuranceProduct, InsuranceCompanyRequest
+from .models import InsurancePolicy, PlanDocument, AnnualValue, MembershipPlan, UserQuota, GeminiUsage, MediaLibrary, InsuranceCompany, InsuranceProduct, InsuranceCompanyRequest, PagePermission, UserProductSettings
 import json
 
 
@@ -940,3 +940,84 @@ class InsuranceProductAdmin(admin.ModelAdmin):
             formatted_amount
         )
     annual_premium_display.short_description = '年缴金额'
+
+
+@admin.register(PagePermission)
+class PagePermissionAdmin(admin.ModelAdmin):
+    """页面访问权限管理"""
+    list_display = [
+        'page_name',
+        'page_code',
+        'groups_display',
+        'require_staff',
+        'is_active',
+        'sort_order',
+        'created_at'
+    ]
+    list_filter = ['require_staff', 'is_active', 'created_at']
+    search_fields = ['page_name', 'page_code', 'description']
+    ordering = ['sort_order', 'page_name']
+    filter_horizontal = ['allowed_groups']  # 使用横向过滤器选择用户组
+
+    fieldsets = (
+        ('页面信息', {
+            'fields': ('page_name', 'page_code', 'route_path', 'description'),
+            'description': '页面的基本标识信息'
+        }),
+        ('显示设置', {
+            'fields': ('icon', 'color'),
+            'description': '用于前端界面显示的样式配置'
+        }),
+        ('权限配置', {
+            'fields': ('allowed_groups', 'require_staff', 'is_active'),
+            'description': '<strong>权限规则说明：</strong><br>'
+                         '• <strong>允许的用户组</strong>：选择可以访问此页面的用户组。如果不选择任何组，则所有登录用户都可以访问<br>'
+                         '• <strong>需要管理员权限</strong>：勾选后，只有管理员（is_staff=True）可以访问，忽略用户组设置<br>'
+                         '• <strong>启用</strong>：是否启用此权限控制。未启用时，所有人都可以访问<br>'
+                         '• <strong>注意</strong>：管理员始终拥有所有页面的访问权限'
+        }),
+        ('排序', {
+            'fields': ('sort_order',),
+            'description': '数字越小越靠前'
+        }),
+        ('时间信息', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+    readonly_fields = ['created_at', 'updated_at']
+
+    def groups_display(self, obj):
+        """显示允许的用户组"""
+        groups = obj.allowed_groups.all()
+        if obj.require_staff:
+            return format_html('<span style="color: #e74c3c; font-weight: bold;">🔒 仅管理员</span>')
+        elif groups:
+            group_names = ', '.join([g.name for g in groups])
+            return format_html(
+                '<span style="color: #3498db;">👥 {}</span>',
+                group_names
+            )
+        else:
+            return format_html('<span style="color: #27ae60;">🌍 所有用户</span>')
+    groups_display.short_description = '访问权限'
+
+    def save_model(self, request, obj, form, change):
+        """保存时的提示"""
+        super().save_model(request, obj, form, change)
+        if change:
+            self.message_user(request, f'权限配置已更新：{obj.page_name}。用户需要重新登录才能看到变化。')
+        else:
+            self.message_user(request, f'已创建页面权限：{obj.page_name}')
+
+
+@admin.register(UserProductSettings)
+class UserProductSettingsAdmin(admin.ModelAdmin):
+    list_display = ['user', 'product_count', 'updated_at']
+    search_fields = ['user__username', 'user__email']
+    readonly_fields = ['created_at', 'updated_at']
+
+    def product_count(self, obj):
+        return len(obj.selected_product_ids) if obj.selected_product_ids else 0
+    product_count.short_description = '选择的产品数量'

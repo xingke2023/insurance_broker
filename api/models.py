@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 
 class WeChatUser(models.Model):
@@ -208,6 +208,8 @@ class Membership(models.Model):
         max_length=20,
         choices=[
             ('trial', '试用会员'),
+            ('solo', 'Solo计划'),
+            ('team', 'Team计划'),
             ('monthly', '包月会员'),
             ('yearly', '包年会员'),
         ],
@@ -220,6 +222,10 @@ class Membership(models.Model):
     # 时间信息
     start_date = models.DateTimeField(verbose_name='开始时间')
     end_date = models.DateTimeField(verbose_name='到期时间')
+
+    # Stripe相关字段
+    stripe_customer_id = models.CharField(max_length=100, verbose_name='Stripe客户ID', blank=True)
+    stripe_subscription_id = models.CharField(max_length=100, verbose_name='Stripe订阅ID', blank=True)
 
     # 使用统计
     documents_created = models.IntegerField(default=0, verbose_name='已创建计划书数')
@@ -261,6 +267,8 @@ class PaymentOrder(models.Model):
         max_length=20,
         choices=[
             ('trial', '试用会员'),
+            ('solo', 'Solo计划'),
+            ('team', 'Team计划'),
             ('monthly', '包月会员'),
             ('yearly', '包年会员'),
         ],
@@ -268,9 +276,24 @@ class PaymentOrder(models.Model):
         blank=True
     )
 
+    # 支付方式
+    payment_method = models.CharField(
+        max_length=20,
+        choices=[
+            ('wechat', '微信支付'),
+            ('stripe', 'Stripe支付'),
+        ],
+        default='wechat',
+        verbose_name='支付方式'
+    )
+
     # 微信支付相关
     transaction_id = models.CharField(max_length=64, verbose_name='微信支付交易号', blank=True)
     prepay_id = models.CharField(max_length=64, verbose_name='预支付交易会话标识', blank=True)
+
+    # Stripe支付相关
+    stripe_payment_intent_id = models.CharField(max_length=100, verbose_name='Stripe支付意图ID', blank=True)
+    stripe_session_id = models.CharField(max_length=100, verbose_name='Stripe会话ID', blank=True)
 
     # 订单状态
     status = models.CharField(
@@ -926,3 +949,121 @@ class InsuranceCompanyRequest(models.Model):
 
     def __str__(self):
         return f"{self.company.name} - {self.request_name}"
+
+
+class PagePermission(models.Model):
+    """页面访问权限配置"""
+    page_name = models.CharField(
+        max_length=100,
+        unique=True,
+        verbose_name='页面名称',
+        help_text='页面的显示名称，如：计划书分步骤分析'
+    )
+    page_code = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name='页面代码',
+        help_text='页面的唯一标识，如：plan-analyzer-2'
+    )
+    route_path = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name='路由路径',
+        help_text='页面的路由路径，如：/plan-analyzer-2'
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name='描述',
+        help_text='页面功能描述'
+    )
+    allowed_groups = models.ManyToManyField(
+        Group,
+        blank=True,
+        verbose_name='允许的用户组',
+        help_text='拥有访问权限的用户组。如果为空，则所有登录用户都可以访问'
+    )
+    require_staff = models.BooleanField(
+        default=False,
+        verbose_name='需要管理员权限',
+        help_text='如果勾选，只有管理员（is_staff=True）可以访问'
+    )
+    is_active = models.BooleanField(
+        default=True,
+        verbose_name='启用',
+        help_text='是否启用此权限控制'
+    )
+    icon = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name='图标',
+        help_text='页面图标类名'
+    )
+    color = models.CharField(
+        max_length=100,
+        blank=True,
+        verbose_name='颜色',
+        help_text='页面卡片的渐变色，如：from-emerald-600 to-teal-600'
+    )
+    sort_order = models.IntegerField(
+        default=0,
+        verbose_name='排序',
+        help_text='数字越小越靠前'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='创建时间'
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name='更新时间'
+    )
+
+    class Meta:
+        db_table = 'page_permissions'
+        verbose_name = '页面访问权限'
+        verbose_name_plural = '页面访问权限'
+        ordering = ['sort_order', 'page_name']
+
+    def __str__(self):
+        return f"{self.page_name} ({self.page_code})"
+
+    def check_user_permission(self, user):
+        """检查用户是否有权限访问此页面"""
+        # 如果未启用权限控制，所有人都可以访问
+        if not self.is_active:
+            return True
+
+        # 如果需要管理员权限，检查用户是否是管理员
+        if self.require_staff:
+            return user.is_staff
+
+        # 如果没有设置任何允许的组，所有登录用户都可以访问
+        if self.allowed_groups.count() == 0:
+            return True
+
+        # 管理员始终有权限
+        if user.is_staff:
+            return True
+
+        # 检查用户是否在允许的组中
+        user_groups = user.groups.all()
+        allowed_groups = self.allowed_groups.all()
+        return any(group in allowed_groups for group in user_groups)
+
+
+class UserProductSettings(models.Model):
+    """
+    用户产品对比设置
+    存储用户在产品对比页面中选择显示的产品
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='product_settings')
+    selected_product_ids = models.JSONField(default=list, help_text='用户选择的产品ID列表')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = '用户产品对比设置'
+        verbose_name_plural = '用户产品对比设置'
+
+    def __str__(self):
+        return f'{self.user.username} 的产品对比设置'

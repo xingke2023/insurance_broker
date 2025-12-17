@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import InsurancePolicyViewSet
-from .auth_views import register, login, user_profile, wechat_login, generate_miniprogram_scheme, wechat_web_auth, wechat_update_profile, wechat_upload_avatar
+from .auth_views import register, login, user_profile, wechat_login, generate_miniprogram_scheme, wechat_web_auth, wechat_update_profile, wechat_upload_avatar, get_page_permissions
 from .ocr_views import save_ocr_result, get_saved_documents, get_pending_documents, get_document_detail, analyze_document_table, analyze_basic_info, delete_documents, chat_with_document, extract_summary, get_processing_status, ocr_webhook, create_pending_document, retry_failed_document, upload_pdf_async
 from .payment_views_v3 import create_payment_order_v3, payment_notify_v3, create_jsapi_payment, get_membership_plans
 from .plan_views import get_membership_status
@@ -22,6 +22,8 @@ from .pdf_views import remove_pdf_footer, crop_pdf_footer
 from .poster_views import analyze_poster_view, get_analysis_templates
 from .axa_benefit_views import analyze_axa_benefit, calculate_withdrawal
 from .insurance_company_views import get_insurance_companies, get_company_requests, get_request_detail, get_company_request_by_name, execute_api_request, get_companies_standard_comparison
+from .stripe_views import create_checkout_session, stripe_webhook, check_membership_status
+from .product_settings_views import get_all_products, manage_user_product_settings
 # 计划书提取功能已删除
 # from .plan_views import (
 #     upload_plan_document, get_plan_documents, get_plan_document,
@@ -37,6 +39,7 @@ urlpatterns = [
     path('auth/register/', register, name='register'),
     path('auth/login/', login, name='login'),
     path('auth/profile/', user_profile, name='user-profile'),
+    path('auth/page-permissions/', get_page_permissions, name='page-permissions'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
 
     # 微信小程序登录
@@ -54,6 +57,11 @@ urlpatterns = [
 
     # 会员相关API
     path('membership/status', get_membership_status, name='membership-status'),
+    path('membership/check', check_membership_status, name='check-membership-status'),
+
+    # Stripe支付相关API
+    path('stripe/create-checkout-session', create_checkout_session, name='create-checkout-session'),
+    path('stripe/webhook', stripe_webhook, name='stripe-webhook'),
 
     # OCR结果保存API
     path('ocr/upload-async/', upload_pdf_async, name='upload-pdf-async'),  # 异步上传PDF进行OCR
@@ -146,6 +154,10 @@ urlpatterns = [
     path('insurance-companies/<str:company_code>/requests/<str:request_name>/', get_company_request_by_name, name='get-company-request-by-name'),
     path('insurance-companies/<str:company_code>/requests/<str:request_name>/execute', execute_api_request, name='execute-api-request'),
     path('insurance-requests/<int:request_id>/', get_request_detail, name='get-request-detail'),
+
+    # 产品对比设置API
+    path('company-comparison/products', get_all_products, name='get-all-products'),
+    path('user/product-comparison-settings', manage_user_product_settings, name='manage-user-product-settings'),
 
     # 计划书提取功能路由已删除
     # path('insurance-companies/', get_insurance_companies, name='insurance-companies'),

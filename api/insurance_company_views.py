@@ -56,6 +56,7 @@ def get_companies_standard_comparison(request):
 
     查询参数:
         payment_period: 缴费年限（可选，默认5年）例如：1, 2, 5
+        selected_product_ids: 用户选择的产品ID列表，逗号分隔（可选）
     """
     from .models import InsuranceProduct
 
@@ -67,16 +68,31 @@ def get_companies_standard_comparison(request):
         except ValueError:
             payment_period = 5
 
+        # 获取用户选择的产品ID列表
+        selected_product_ids_str = request.GET.get('selected_product_ids', '')
+        selected_product_ids = []
+        if selected_product_ids_str:
+            try:
+                selected_product_ids = [int(pid.strip()) for pid in selected_product_ids_str.split(',') if pid.strip()]
+            except ValueError:
+                selected_product_ids = []
+
         companies = InsuranceCompany.objects.filter(is_active=True).order_by('sort_order')
 
         company_list = []
         for company in companies:
             # 从 insurance_products 表查询该公司对应年期的所有产品
-            products = InsuranceProduct.objects.filter(
+            products_query = InsuranceProduct.objects.filter(
                 company=company,
                 payment_period=payment_period,
                 is_active=True
-            ).order_by('sort_order', 'id')
+            )
+
+            # 如果用户指定了产品ID，则只返回这些产品
+            if selected_product_ids:
+                products_query = products_query.filter(id__in=selected_product_ids)
+
+            products = products_query.order_by('sort_order', 'id')
 
             # 解析所有产品数据
             products_data = []

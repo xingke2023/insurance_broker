@@ -43,26 +43,26 @@ function HomePage() {
     {
       category: '保单与计划书',
       tools: [
-        { name: '计划书管理', icon: Folder, action: () => isAuthenticated ? onNavigate('plan-management') : setShowLogin(true), color: 'from-blue-500 via-blue-600 to-indigo-700' },
-        { name: '计划书分步骤分析', icon: FileText, action: () => isAuthenticated ? onNavigate('plan-analyzer-2') : setShowLogin(true), color: 'from-indigo-500 via-purple-600 to-purple-700' },
-        { name: '各公司保险产品对比', icon: FileText, action: () => onNavigate('company-comparison'), color: 'from-purple-500 via-purple-600 to-pink-700' },
+        { name: '计划书分析工具', icon: Folder, action: () => isAuthenticated ? onNavigate('plan-management') : setShowLogin(true), color: 'from-blue-500 via-blue-600 to-indigo-700' },
+        { name: '计划书制作工具', icon: FileText, action: () => isAuthenticated ? onNavigate('plan-builder') : setShowLogin(true), color: 'from-indigo-500 via-purple-600 to-purple-700', disabled: true },
+        { name: '港险产品比对工具', icon: FileText, action: () => onNavigate('company-comparison'), color: 'from-purple-500 via-purple-600 to-pink-700' },
       ]
     },
     {
-      category: '个人IP与发文',
+      category: '个人IP与营销',
       tools: [
         { name: '打造个人IP形象', icon: Sparkles, action: () => isAuthenticated ? onNavigate('ip-image-generator') : setShowLogin(true), color: 'from-pink-500 via-rose-600 to-rose-700' },
-        { name: '个人IP动画配图制作', icon: Image, action: () => isAuthenticated ? onNavigate('content-image-generator') : setShowLogin(true), color: 'from-rose-500 via-red-600 to-red-700' },
-        { name: '轮播图视频制作', icon: Video, action: () => isAuthenticated ? onNavigate('video-projects') : setShowLogin(true), color: 'from-red-500 via-orange-600 to-orange-700' },
-        { name: '个人IP语音制作', icon: Mic, action: () => isAuthenticated ? onNavigate('text-to-speech') : setShowLogin(true), color: 'from-orange-500 via-amber-600 to-amber-700' },
-        { name: '文案制作工具', icon: PenTool, action: () => window.open('https://write.xingke888.com/editor', '_blank'), color: 'from-amber-500 via-yellow-600 to-yellow-700' },
+        { name: '宣传图制作(基于个人IP)', icon: Image, action: () => isAuthenticated ? onNavigate('content-image-generator') : setShowLogin(true), color: 'from-rose-500 via-red-600 to-red-700' },
+        { name: '视频制作', icon: Video, action: () => isAuthenticated ? onNavigate('video-projects') : setShowLogin(true), color: 'from-red-500 via-orange-600 to-orange-700' },
+        { name: '个性化语音制作', icon: Mic, action: () => isAuthenticated ? onNavigate('text-to-speech') : setShowLogin(true), color: 'from-orange-500 via-amber-600 to-amber-700' },
+        { name: '公众号写作及排版工具', icon: PenTool, action: () => window.open('https://write.xingke888.com/editor', '_blank'), color: 'from-amber-500 via-yellow-600 to-yellow-700' },
       ]
     },
     {
       category: '办公工具',
       tools: [
-        { name: '我的图像素材库', icon: Folder, action: () => isAuthenticated ? onNavigate('media-library') : setShowLogin(true), color: 'from-emerald-500 via-green-600 to-green-700' },
-        { name: '海报分析工具', icon: ScanLine, action: () => isAuthenticated ? onNavigate('poster-analyzer') : setShowLogin(true), color: 'from-green-500 via-teal-600 to-teal-700' },
+        { name: '我的图片库', icon: Folder, action: () => isAuthenticated ? onNavigate('media-library') : setShowLogin(true), color: 'from-emerald-500 via-green-600 to-green-700' },
+        { name: '产品海报分析工具', icon: ScanLine, action: () => isAuthenticated ? onNavigate('poster-analyzer') : setShowLogin(true), color: 'from-green-500 via-teal-600 to-teal-700' },
         { name: 'PDF页脚擦除工具', icon: FileEdit, action: () => isAuthenticated ? onNavigate('pdf-footer-remover') : setShowLogin(true), color: 'from-teal-500 via-cyan-600 to-cyan-700' },
       ]
     }
@@ -146,10 +146,22 @@ function HomePage() {
                 {category.tools.map((tool, index) => (
                   <button
                     key={index}
-                    onClick={tool.action}
-                    className={`group relative overflow-hidden bg-gradient-to-br ${tool.color} rounded-[14px] px-3 py-2.5 sm:px-4 sm:py-3 shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-2.5 sm:gap-3 text-left min-h-[60px] sm:min-h-[65px] hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0`}
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (!tool.disabled) {
+                        tool.action();
+                      }
+                    }}
+                    disabled={tool.disabled}
+                    className={`group relative overflow-hidden bg-gradient-to-br ${tool.color} rounded-[14px] px-3 py-2.5 sm:px-4 sm:py-3 shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-all duration-300 flex items-center gap-2.5 sm:gap-3 text-left min-h-[60px] sm:min-h-[65px] ${
+                      tool.disabled
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:scale-[1.02] hover:-translate-y-0.5 active:scale-[0.98] active:translate-y-0 cursor-pointer'
+                    }`}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className={`absolute inset-0 bg-gradient-to-t from-black/10 to-transparent transition-opacity ${tool.disabled ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'} duration-300`}></div>
                     <tool.icon className="relative z-10 w-7 h-7 sm:w-8 sm:h-8 text-white flex-shrink-0 transition-transform group-hover:scale-110 drop-shadow-lg" />
                     <h3 className="relative z-10 text-xs sm:text-sm font-semibold text-white tracking-tight leading-tight drop-shadow-md">
                       {tool.name}

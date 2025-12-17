@@ -4,12 +4,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from .gemini_service import analyze_poster, analyze_poster_with_custom_prompt
+from .permissions import IsMemberActive
 
 logger = logging.getLogger(__name__)
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated, IsMemberActive])
 def analyze_poster_view(request):
     """
     海报分析API

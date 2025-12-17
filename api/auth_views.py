@@ -221,6 +221,8 @@ def register(request):
             'username': user.username,
             'email': user.email,
             'full_name': user.get_full_name() or user.username,
+            'groups': [group.name for group in user.groups.all()],  # 返回用户所属的组
+            'is_staff': user.is_staff,  # 返回是否是管理员
         },
         'tokens': {
             'refresh': str(refresh),
@@ -260,6 +262,8 @@ def login(request):
             'username': user.username,
             'email': user.email,
             'full_name': user.get_full_name() or user.username,
+            'groups': [group.name for group in user.groups.all()],  # 返回用户所属的组
+            'is_staff': user.is_staff,  # 返回是否是管理员
         },
         'tokens': {
             'refresh': str(refresh),
@@ -283,6 +287,8 @@ def user_profile(request):
             'first_name': user.first_name,
             'last_name': user.last_name,
             'date_joined': user.date_joined,
+            'groups': [group.name for group in user.groups.all()],  # 返回用户所属的组
+            'is_staff': user.is_staff,  # 返回是否是管理员
         }
 
         # 如果用户有关联的微信信息，也返回
@@ -539,6 +545,8 @@ def wechat_login(request):
                     'avatar': avatar_url,
                     'phone': phone_number or wechat_user.phone_number or '',
                     'hasPhone': has_phone,  # 是否已有手机号
+                    'groups': [group.name for group in user.groups.all()],  # 返回用户所属的组
+                    'is_staff': user.is_staff,  # 返回是否是管理员
                 }
             }
         })
@@ -730,6 +738,8 @@ def wechat_web_auth(request):
                     'nickname': wechat_user.nickname,
                     'avatar': wechat_user.avatar_url,
                     'full_name': user.get_full_name() or wechat_user.nickname or user.username,
+                    'groups': [group.name for group in user.groups.all()],  # 返回用户所属的组
+                    'is_staff': user.is_staff,  # 返回是否是管理员
                 }
             }
         })
@@ -834,3 +844,38 @@ def wechat_upload_avatar(request):
             {'code': 500, 'message': '上传失败'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+
+@api_view(['GET'])
+def get_page_permissions(request):
+    """获取当前用户的页面访问权限"""
+    from .models import PagePermission
+    
+    user = request.user
+    
+    # 获取所有启用的页面权限配置
+    page_permissions = PagePermission.objects.filter(is_active=True).prefetch_related('allowed_groups')
+    
+    # 构建权限列表
+    accessible_pages = []
+    
+    for page in page_permissions:
+        # 检查用户是否有权限访问此页面
+        if page.check_user_permission(user):
+            accessible_pages.append({
+                'page_code': page.page_code,
+                'page_name': page.page_name,
+                'route_path': page.route_path,
+                'icon': page.icon,
+                'color': page.color,
+                'description': page.description,
+                'sort_order': page.sort_order,
+            })
+    
+    # 按排序字段排序
+    accessible_pages.sort(key=lambda x: x['sort_order'])
+    
+    return Response({
+        'status': 'success',
+        'data': accessible_pages
+    })

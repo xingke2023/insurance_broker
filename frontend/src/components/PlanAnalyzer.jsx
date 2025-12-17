@@ -544,8 +544,8 @@ function PlanAnalyzer() {
 
       console.log('🚀 开始异步上传PDF...');
 
-      // 调用异步上传API
-      const response = await fetch('/api/ocr/upload-async/', {
+      // 调用异步上传API（使用authFetch携带认证token）
+      const response = await authFetch('/api/ocr/upload-async/', {
         method: 'POST',
         body: formData,
       });

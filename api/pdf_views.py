@@ -21,14 +21,22 @@ def remove_pdf_footer(request):
     - process_start_page: 处理开始页码，从原文件第几页开始处理（默认1）
     - page_number_start: 起始页码编号，从原文件第几页开始添加"第1页"（默认1）
     """
+    print(f'\n🔄 收到PDF页脚移除请求')
+    print(f'   用户: {request.user.username}')
+    print(f'   请求方法: {request.method}')
+
     try:
         # 获取上传的PDF文件
         pdf_file = request.FILES.get('pdf_file')
         if not pdf_file:
+            print('❌ 未找到PDF文件')
             return Response({
                 'status': 'error',
                 'message': '请上传PDF文件'
             }, status=400)
+
+        print(f'   文件名: {pdf_file.name}')
+        print(f'   文件大小: {pdf_file.size} bytes ({pdf_file.size / 1024 / 1024:.2f} MB)')
 
         # 检查文件类型
         if not pdf_file.name.endswith('.pdf'):
@@ -64,17 +72,23 @@ def remove_pdf_footer(request):
         remove_areas_str = request.POST.get('remove_areas', '{}')
         try:
             remove_areas = json.loads(remove_areas_str)
+            print(f'   擦除区域配置: {remove_areas}')
         except json.JSONDecodeError:
+            print('❌ 擦除区域参数格式错误')
             return Response({
                 'status': 'error',
                 'message': '擦除区域参数格式错误'
             }, status=400)
 
         # 读取PDF文件
+        print('   读取PDF文件...')
         pdf_bytes = pdf_file.read()
+        print(f'   读取完成: {len(pdf_bytes)} bytes')
 
         # 使用PyMuPDF处理PDF
+        print('   打开PDF文档...')
         pdf_document = fitz.open(stream=pdf_bytes, filetype="pdf")
+        print(f'   PDF打开成功，共 {len(pdf_document)} 页')
 
         # 检查PDF是否加密
         if pdf_document.is_encrypted:
@@ -111,8 +125,11 @@ def remove_pdf_footer(request):
             }, status=400)
 
         # 遍历每一页，从处理开始页码开始处理（索引从0开始，所以需要-1）
+        print(f'   开始处理页面：从第 {process_start_page} 页到第 {total_pages} 页')
         for page_num in range(process_start_page - 1, total_pages):
             page = pdf_document[page_num]
+            if page_num == process_start_page - 1:
+                print(f'   处理第 {page_num + 1} 页...')
 
             # 检查并修正页面旋转（只修正倒置的页面180度 -> 0度）
             rotation = page.rotation
@@ -181,7 +198,7 @@ def remove_pdf_footer(request):
                     # 总页数 = 从起始页码到最后一页的数量
                     # 例如：共10页，从第3页开始编号，总数=10-3+1=8页
                     display_total_pages = total_pages - page_number_start + 1
-                    page_text = f"第 {display_page_num} 頁，共 {display_total_pages} 頁"
+                    page_text = f"第 {display_page_num} 頁,共 {display_total_pages} 頁"
 
                     # 如果有自定义文字，添加到页码下方
                     if custom_text:
@@ -199,13 +216,14 @@ def remove_pdf_footer(request):
                     page.insert_textbox(
                         text_rect,
                         page_text,
-                        fontsize=10,
+                        fontsize=8,  # 字体大小改为8，更小更紧凑
                         fontname="china-s",  # 中文简体字体
                         color=(0, 0, 0),  # 黑色
                         align=fitz.TEXT_ALIGN_CENTER,  # 居中对齐
                     )
 
         # 保存到内存，使用压缩选项
+        print('   保存处理后的PDF...')
         output_buffer = io.BytesIO()
         pdf_document.save(
             output_buffer,
@@ -214,23 +232,47 @@ def remove_pdf_footer(request):
             clean=True,  # 清理未使用的对象
         )
         pdf_document.close()
+        print(f'   PDF保存成功，大小: {len(output_buffer.getvalue())} bytes')
 
         # 重置缓冲区指针
         output_buffer.seek(0)
 
         # 生成文件名
         original_name = pdf_file.name
-        output_filename = original_name.replace('.pdf', '_无页脚.pdf')
+        output_filename = original_name.replace('.pdf', '_计划书.pdf')
 
         # 返回处理后的PDF文件
+        print(f'✅ PDF处理完成，返回文件: {output_filename}')
         response = HttpResponse(output_buffer.read(), content_type='application/pdf')
         response['Content-Disposition'] = f'attachment; filename="{output_filename}"'
         response['Access-Control-Expose-Headers'] = 'Content-Disposition'
 
         return response
 
+    except fitz.FileDataError as e:
+        # PDF文件格式错误
+        print(f'❌ PDF文件格式错误: {str(e)}')
+        import traceback
+        traceback.print_exc()
+        return Response({
+            'status': 'error',
+            'message': f'PDF文件格式错误，请确保上传的是有效的PDF文件: {str(e)}'
+        }, status=400)
+
+    except MemoryError as e:
+        # 内存不足
+        print(f'❌ 内存不足: {str(e)}')
+        return Response({
+            'status': 'error',
+            'message': 'PDF文件过大，服务器内存不足，请尝试上传较小的文件'
+        }, status=413)
+
     except Exception as e:
+        # 其他未知错误
         print(f'❌ 处理PDF失败: {str(e)}')
+        print(f'   错误类型: {type(e).__name__}')
+        print(f'   PDF文件名: {pdf_file.name if pdf_file else "未知"}')
+        print(f'   PDF文件大小: {pdf_file.size if pdf_file else 0} bytes')
         import traceback
         traceback.print_exc()
 

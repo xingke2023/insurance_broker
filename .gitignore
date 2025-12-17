@@ -60,3 +60,7 @@ Thumbs.db
 
 # Claude
 .claude/
+
+# Sensitive configuration files
+STRIPE_STATUS.md
+*_STATUS.md

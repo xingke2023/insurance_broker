@@ -7,6 +7,7 @@ from django.utils import timezone
 from .models import PlanDocument
 from .deepseek_service import analyze_insurance_table, extract_plan_data_from_text, extract_plan_summary
 from .tasks import process_document_pipeline  # 使用Celery任务替代线程
+from .permissions import IsMemberActive
 import json
 import base64
 import logging
@@ -735,6 +736,7 @@ def delete_documents(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsMemberActive])
 def chat_with_document(request, document_id):
     """
     与计划书文档进行多轮对话（支持流式输出）
@@ -1027,6 +1029,7 @@ def extract_summary(request, document_id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsMemberActive])
 def create_pending_document(request):
     """
     创建待处理的文档记录（在OCR开始前）
@@ -1449,6 +1452,7 @@ def retry_failed_document(request, document_id):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated, IsMemberActive])
 def upload_pdf_async(request):
     """
     异步上传PDF文件进行OCR识别
