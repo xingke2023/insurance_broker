@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, GitCompare, Loader2, CheckCircle, Printer, Download, Check, Palette, ChevronDown, Settings } from 'lucide-react';
+import { ArrowLeft, GitCompare, Loader2, CheckCircle, Printer, Download, Check, Palette, ChevronDown } from 'lucide-react';
 import { useAppNavigate } from '../hooks/useAppNavigate';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import CompanyIconDisplay from './CompanyIconDisplay';
 import Calculator from './Calculator';
 
-function CompanyComparison() {
+function CompanyComparisonCC() {
   const onNavigate = useAppNavigate();
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -183,7 +183,7 @@ function CompanyComparison() {
   useEffect(() => {
     // 设置页面标题
     const originalTitle = document.title;
-    document.title = '產品對比工具';
+    document.title = '港險儲蓄分紅型產品收益統計';
 
     fetchCompanies();
 
@@ -866,6 +866,18 @@ function CompanyComparison() {
                     </svg>
                     <span className="hidden sm:inline">显示项</span>
                   </button>
+                  <a
+                    href="https://work.weixin.qq.com/kfid/kfcdfdb02ed73c8e4d0"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all text-sm font-semibold text-white whitespace-nowrap"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    <span className="hidden sm:inline">联系保险顾问</span>
+                    <span className="sm:hidden">咨询</span>
+                  </a>
                 </div>
               </div>
 
@@ -1057,7 +1069,7 @@ function CompanyComparison() {
                                 </td>
                               )}
                               {visibleColumns.total && (
-                                <td className={`relative ${isCompactMode ? 'px-0.5 py-1' : 'px-2 py-2.5'} ${isCompactMode ? 'text-xs' : 'text-base'} font-bold text-center whitespace-nowrap ${currentTheme === 'luxury' ? 'text-amber-300 bg-amber-900/10' : 'text-indigo-700 bg-indigo-50/30'} ${bestCellClass} ${bestTextClass} ${lastVisibleColumn === 'total' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>
+                                <td className={`relative ${isCompactMode ? 'px-0.5 py-1' : 'px-2 py-2.5'} ${isCompactMode ? 'text-xs' : 'text-base'} font-bold text-center whitespace-nowrap ${currentTheme === 'luxury' ? 'text-amber-300 bg-amber-900/10' : 'text-indigo-700 bg-indigo-50/30'} ${bestCellClass} ${bestTextClass} ${isBreakEvenYear ? 'ring-4 ring-red-500 ring-inset' : ''} ${lastVisibleColumn === 'total' ? `border-r-2 ${currentThemeConfig.borderColor}` : ''}`}>
                                   {isBreakEvenYear && (
                                     <span className="absolute bottom-0.5 right-0.5 bg-red-500/40 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm">
                                       回本
@@ -1241,24 +1253,19 @@ function CompanyComparison() {
   // 列表视图
   return (
     <div className={`min-h-screen bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 px-3 md:px-4 pt-4 md:pt-6 pb-4 md:pb-6 transition-colors duration-500 relative`}>
-      {/* 返回首页按钮 - 左上角 */}
-      <button
-        onClick={() => onNavigate('home')}
-        className="absolute top-3 left-3 md:top-4 md:left-4 flex items-center gap-1 px-3 py-1.5 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg hover:shadow-xl transition-all text-xs md:text-sm font-semibold text-gray-900 border border-indigo-200/50 hover:scale-105 hover:border-indigo-300 z-10"
+      {/* 联系保险顾问按钮 - 右上角 */}
+      <a
+        href="https://work.weixin.qq.com/kfid/kfcdfdb02ed73c8e4d0"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center gap-2 px-4 py-1.5 bg-gradient-to-r from-green-500 to-emerald-600 backdrop-blur-xl rounded-xl shadow-lg hover:shadow-xl transition-all text-xs md:text-sm font-semibold text-white hover:scale-105 hover:from-green-600 hover:to-emerald-700 z-10"
       >
-        <ArrowLeft className="w-3 h-3 md:w-4 md:h-4" />
-        <span className="hidden sm:inline">返回首页</span>
-        <span className="sm:hidden">返回</span>
-      </button>
-
-      {/* 设置按钮 - 右上角 */}
-      <button
-        onClick={() => onNavigate('product-comparison-settings')}
-        className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center gap-1 px-3 py-1.5 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg hover:shadow-xl transition-all text-xs md:text-sm font-semibold text-gray-900 border border-indigo-200/50 hover:scale-105 hover:border-indigo-300 z-10"
-      >
-        <Settings className="w-3 h-3 md:w-4 md:h-4" />
-        <span className="hidden sm:inline">设置</span>
-      </button>
+        <svg className="w-3.5 h-3.5 md:w-4 md:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+        </svg>
+        <span className="hidden sm:inline">联系保险顾问</span>
+        <span className="sm:hidden">咨询</span>
+      </a>
 
       <div className="max-w-[98%] mx-auto">
         {/* 头部 */}
@@ -1731,4 +1738,4 @@ function CompanyComparison() {
   );
 }
 
-export default CompanyComparison;
+export default CompanyComparisonCC;

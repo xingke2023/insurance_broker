@@ -1,0 +1,64 @@
+将现有的保险计划书分析系统扩展为全方位的保险咨询和比较平台，包括AI智能推荐、客户案例展示、产品对比、在线客服、专业论坛等功能。
+
+---
+
+
+**要求**：
+- 在api/models.py中扩展InsuranceProduct模型，添加以下字段：
+- product_category: 产品类别（储蓄分红型/重疾险/医疗险/人寿险等）
+- target_age_group: 目标年龄段（JSON字段：最小年龄、最大年龄）
+- premium_range: 保费范围（JSON字段：最低保费、最高保费）
+- coverage_period: 保障期限（终身/定期/年数）
+- payment_period: 缴费期限（趸交/5年/10年/20年等）
+- guaranteed_return_rate: 保证回报率（百分比）
+- estimated_return_rate: 预期回报率（百分比）
+- key_features: 产品特色（JSON数组）
+- suitable_for: 适合人群（JSON数组：人生阶段、收入水平、家庭状况）
+- is_flagship: 是否为主打产品（布尔值）
+- ranking_score: 综合评分（1-100）
+- 运行makemigrations和migrate
+- 使用Django admin界面测试新字段|7f383301-d43d-4845-b4ed-83d98d89fab7
+**要求**：
+- 在api/models.py中创建ClientCase模型，包含字段：
+- title: 案例标题
+- life_stage: 人生阶段（扶幼保障期/收入成长期/责任高峰期/责任递减期/退休期）
+- age: 客户年龄
+- annual_income: 年收入
+- family_situation: 家庭状况（JSON：配偶、子女数量、父母赡养等）
+- insurance_needs: 保险需求（JSON数组）
+- recommended_products: 推荐产品（ManyToMany关联InsuranceProduct）
+- total_annual_premium: 年度总保费
+- case_description: 案例描述（文本）
+- solution_explanation: 解决方案说明（文本）
+- case_image: 案例配图（ImageField）
+- created_at, updated_at: 时间戳
+- is_published: 是否发布
+- view_count: 浏览次数
+- 创建序列化器ClientCaseSerializer
+- 运行迁移并创建5-10个示例案例数据|7f383301-d43d-4845-b4ed-83d98d89fab7
+**要求**：
+- 在api/models.py中创建ProductComparison模型：
+- comparison_type: 对比类型（储蓄分红型/重疾险/医疗险等）
+- products: 对比产品列表（ManyToMany关联InsuranceProduct）
+- comparison_dimensions: 对比维度（JSON：保费、回报率、保障范围、灵活性等）
+- comparison_data: 对比数据（JSON：每个产品在各维度的数据）
+- conclusion: 对比结论（文本）
+- created_at, updated_at
+- 创建序列化器ProductComparisonSerializer
+- 运行迁移|7f383301-d43d-4845-b4ed-83d98d89fab7
+**要求**：
+- 在api/models.py中创建OnlineAgent模型：
+- name: 客服姓名
+- title: 职称（理财顾问/精算师/资深顾问等）
+- avatar: 头像图片（ImageField）
+- specialization: 专长领域（JSON数组：储蓄险/重疾险/税务规划等）
+- years_of_experience: 从业年限
+- certifications: 专业资质（JSON数组）
+- is_online: 是否在线
+- whatsapp: WhatsApp号码
+- wechat: 微信号
+- email: 邮箱
+- introduction: 个人简介
+- display_order: 显示顺序
+- 创建序列化器OnlineAgentSerializer
+- 运行迁移并创建5-8个客服数据|7f383301-d43d-4845-b4ed-83d98d89fab7

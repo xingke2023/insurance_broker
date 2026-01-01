@@ -44,6 +44,12 @@ function ProtectedRoute({ children }) {
       // 标记已经执行过重定向
       hasRedirected.current = true;
 
+      // 设置超时保护：2秒后如果还没跳转，强制跳转到首页
+      const redirectTimeout = setTimeout(() => {
+        console.log('🔒 [ProtectedRoute] 超时保护触发，强制跳转到首页');
+        window.location.replace('/');
+      }, 2000);
+
       // 检测是否在小程序环境
       const inMiniProgram = isInMiniProgram();
       console.log('🔒 [ProtectedRoute] 是否在小程序环境:', inMiniProgram);
@@ -53,16 +59,25 @@ function ProtectedRoute({ children }) {
 
         // 使用工具函数处理小程序登录跳转
         redirectToMiniProgramLogin(() => {
-          // 如果跳转失败，回退到 Web 端首页
+          // 如果跳转失败，清除超时并立即回退到 Web 端首页
+          clearTimeout(redirectTimeout);
           console.log('🔒 [ProtectedRoute] 小程序跳转失败，使用window.location强制跳转');
           window.location.replace('/');
         });
       } else {
         console.log('🔒 [ProtectedRoute] 在普通浏览器中，立即重定向到首页');
 
+        // 清除超时（因为我们马上就要跳转了）
+        clearTimeout(redirectTimeout);
+
         // 直接使用window.location.replace，确保跳转生效
         window.location.replace('/');
       }
+
+      // 清理函数：组件卸载时清除超时
+      return () => {
+        clearTimeout(redirectTimeout);
+      };
     } else {
       console.log('🔒 [ProtectedRoute] 用户已登录，允许访问');
     }
@@ -86,7 +101,8 @@ function ProtectedRoute({ children }) {
       <div className="min-h-screen bg-blue-100 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
-          <p className="mt-4 text-gray-600 text-sm font-medium">正在跳转...</p>
+          <p className="mt-4 text-gray-800 text-lg font-semibold">本页面需要登录</p>
+          <p className="mt-2 text-gray-600 text-sm font-medium">正在跳转...</p>
         </div>
       </div>
     );
